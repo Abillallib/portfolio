@@ -16,28 +16,28 @@ import SkillCard from './SkillCard';
 // Technical skills categorized into groups
 const skills = {
   'Data & Analytics': [
-    { name: 'SQL', subtitle: 'Databases', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
-    { name: 'Tableau', subtitle: 'Data Visualization', iconUrl: 'https://www.vectorlogo.zone/logos/tableau/tableau-icon.svg' },
-    { name: 'Excel', subtitle: 'Spreadsheets', iconUrl: 'https://www.vectorlogo.zone/logos/microsoft_excel/microsoft_excel-icon.svg' },
-    { name: 'Power BI', subtitle: 'Business Intelligence', iconUrl: 'https://www.vectorlogo.zone/logos/microsoft_powerbi/microsoft_powerbi-icon.svg' },
-    { name: 'Power Query', subtitle: 'Data Preparation', iconUrl: 'https://www.vectorlogo.zone/logos/microsoft/microsoft-icon.svg' },
-    { name: 'Pandas', subtitle: 'Data Analysis', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg' },
-    { name: 'R', subtitle: 'Statistical Computing', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg' },
+    { name: 'SQL', subtitle: 'Databases', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/postgresql.svg' },
+    { name: 'Tableau', subtitle: 'Data Visualization', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/tableau.svg' },
+    { name: 'Excel', subtitle: 'Spreadsheets', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/microsoftexcel.svg' },
+    { name: 'Power BI', subtitle: 'Business Intelligence', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/powerbi.svg' },
+    { name: 'Power Query', subtitle: 'Data Preparation', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/microsoft.svg' },
+    { name: 'Pandas', subtitle: 'Data Analysis', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/pandas.svg' },
+    { name: 'R', subtitle: 'Statistical Computing', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/r.svg' },
   ],
   'Programming & Automation': [
-    { name: 'Python', subtitle: 'Automation & Analytics', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-    { name: 'JavaScript (React)', subtitle: 'Frontend', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
-    { name: 'Web Scraping', subtitle: 'Automation', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/selenium/selenium-original.svg' },
-    { name: 'Power Automate', subtitle: 'Workflow Automation', iconUrl: 'https://www.vectorlogo.zone/logos/microsoft_powerautomate/microsoft_powerautomate-icon.svg' },
-    { name: 'n8n', subtitle: 'Workflow Automation', iconUrl: 'https://www.vectorlogo.zone/logos/n8n_io/n8n_io-icon.svg' },
-    { name: 'Power Apps', subtitle: 'Low-code Apps', iconUrl: 'https://www.vectorlogo.zone/logos/microsoft_powerapps/microsoft_powerapps-icon.svg' },
+    { name: 'Python', subtitle: 'Automation & Analytics', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/python.svg' },
+    { name: 'JavaScript (React)', subtitle: 'Frontend', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/react.svg' },
+    { name: 'Web Scraping', subtitle: 'Automation', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/selenium.svg' },
+    { name: 'Power Automate', subtitle: 'Workflow Automation', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/microsoftpowerautomate.svg' },
+    { name: 'n8n', subtitle: 'Workflow Automation', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/n8n.svg' },
+    { name: 'Power Apps', subtitle: 'Low-code Apps', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/microsoftpowerapps.svg' },
   ],
   Tools: [
-    { name: 'Git & GitHub', subtitle: 'Version Control', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg' },
-    { name: 'Jupyter Notebook', subtitle: 'Prototyping', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg' },
-    { name: 'VS Code', subtitle: 'Editor', iconUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg' },
-    { name: 'Asana', subtitle: 'Project Management', iconUrl: 'https://www.vectorlogo.zone/logos/asana/asana-icon.svg' },
-    { name: 'Jira', subtitle: 'Issue Tracking', iconUrl: 'https://www.vectorlogo.zone/logos/atlassian_jira/atlassian_jira-icon.svg' },
+    { name: 'Git & GitHub', subtitle: 'Version Control', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg' },
+    { name: 'Jupyter Notebook', subtitle: 'Prototyping', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/jupyter.svg' },
+    { name: 'VS Code', subtitle: 'Editor', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/visualstudiocode.svg' },
+    { name: 'Asana', subtitle: 'Project Management', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/asana.svg' },
+    { name: 'Jira', subtitle: 'Issue Tracking', iconUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/jira.svg' },
   ],
 };
 
@@ -128,11 +128,12 @@ const About = () => {
               sx={{ 
                 mb: 2,
                 '& .MuiTab-root': {
-                  fontSize: '1.1rem',
+                  fontSize: { xs: '0.8rem', sm: '1.1rem' },
                   fontWeight: 600,
                   minHeight: 48,
-                  px: 1,
+                  px: { xs: 0.5, sm: 1 },
                   whiteSpace: 'nowrap',
+                  minWidth: 'auto',
                   '&.Mui-selected': {
                     color: 'primary.main'
                   }
@@ -144,11 +145,16 @@ const About = () => {
                   key={cat} 
                   value={cat} 
                   label={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>
                       {cat === 'Data & Analytics' && <BarChartIcon fontSize="small" />}
                       {cat === 'Programming & Automation' && <CodeIcon fontSize="small" />}
                       {cat === 'Tools' && <BuildIcon fontSize="small" />}
-                      {cat}
+                      <Box sx={{ display: { xs: 'none', sm: 'block' } }}>{cat}</Box>
+                      <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                        {cat === 'Data & Analytics' && 'Data'}
+                        {cat === 'Programming & Automation' && 'Code'}
+                        {cat === 'Tools' && 'Tools'}
+                      </Box>
                     </Box>
                   } 
                 />

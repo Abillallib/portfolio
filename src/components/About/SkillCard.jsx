@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Stack, Avatar, Typography } from '@mui/material';
+import CodeIcon from '@mui/icons-material/Code';
 
 const SkillCard = ({ iconUrl, title, subtitle }) => {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <Box
       sx={{
@@ -32,16 +39,20 @@ const SkillCard = ({ iconUrl, title, subtitle }) => {
     >
       <Avatar
         variant="rounded"
-        src={iconUrl}
+        src={imageError ? undefined : iconUrl}
         alt={title}
+        onError={handleImageError}
         sx={{
-          bgcolor: '#fff',
+          bgcolor: imageError ? 'primary.main' : '#fff',
           width: 60,
           height: 60,
           mr: 2.25,
           borderRadius: 2,
+          color: imageError ? '#fff' : 'inherit',
         }}
-      />
+      >
+        {imageError && <CodeIcon />}
+      </Avatar>
       <Stack spacing={0.25} sx={{ minWidth: 0 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }} noWrap>
           {title}

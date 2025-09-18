@@ -15,7 +15,7 @@ const Hero = () => {
     <Box
       component="section"
       sx={{
-        minHeight: '100vh',
+        minHeight: { xs: '85vh', md: '100vh' },
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -145,7 +145,15 @@ const Hero = () => {
               },
             }}
           >
-            <Tab value="analyst" label="Data Analyst" />
+            <Tab 
+              value="analyst" 
+              label="Data Analyst"
+              sx={{
+                '&.Mui-selected': {
+                  color: '#FFD700',
+                },
+              }}
+            />
             <Tab value="engineer" label="AI Engineer" />
           </Tabs>
 
@@ -173,7 +181,7 @@ const Hero = () => {
           width: '90%',
           mx: 'auto',
           borderColor: 'rgba(255, 255, 255, 0.1)',
-          mt: 'auto',
+          mt: { xs: 4, md: 'auto' },
           mb: 0
         }}
       />

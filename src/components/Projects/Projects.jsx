@@ -42,7 +42,8 @@ const Projects = () => {
     <Box
       sx={{
         width: '100%',
-        py: 8,
+        pt: { xs: 4, md: 8 },
+        pb: 8,
         position: 'relative',
       }}
     >
@@ -105,7 +106,12 @@ const Projects = () => {
           >
             <Tab 
               value="dataAnalysis" 
-              label="Data Analysis" 
+              label="Data Analysis"
+              sx={{
+                '&.Mui-selected': {
+                  color: '#FFD700',
+                },
+              }}
             />
             <Tab 
               value="aiEngineering" 
