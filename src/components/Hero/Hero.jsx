@@ -142,17 +142,15 @@ const Hero = () => {
                 '&.Mui-selected': {
                   color: 'primary.main',
                 },
+                '&[value="analyst"].Mui-selected': {
+                  color: '#FFD700 !important',
+                },
               },
             }}
           >
             <Tab 
               value="analyst" 
               label="Data Analyst"
-              sx={{
-                '&.Mui-selected': {
-                  color: '#FFD700',
-                },
-              }}
             />
             <Tab value="engineer" label="AI Engineer" />
           </Tabs>

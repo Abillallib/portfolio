@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-scroll';
 import MenuIcon from '@mui/icons-material/Menu';
+import { styled } from '@mui/material/styles';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -27,9 +28,27 @@ const Header = () => {
       }}
     >
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ color: '#FFFFFF', fontWeight: 700, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
-          Adjaynae Billings
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box 
+            component="img"
+            src={`${import.meta.env.BASE_URL}favicon.ico`}
+            alt="AB"
+            sx={{
+              width: 28,
+              height: 28,
+              borderRadius: '4px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}
+          />
+          <Typography variant="h6" component="div" sx={{ 
+            color: '#FFFFFF', 
+            fontWeight: 700, 
+            textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+            lineHeight: 1
+          }}>
+            Adjaynae Billings
+          </Typography>
+        </Box>
         <Box sx={{ flexGrow: 1 }} />
 
         {/* Desktop navigation (md and up) */}
