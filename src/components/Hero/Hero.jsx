@@ -152,8 +152,17 @@ const Hero = () => {
               value="analyst" 
               label="Data Analyst"
               sx={{
+                background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
+                color: '#1a237e !important',
+                fontWeight: 600,
+                borderRadius: 1,
+                mx: 0.5,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #FFE55C 0%, #FFB347 50%, #FF9500 100%)',
+                },
                 '&.Mui-selected': {
-                  color: '#FFD700 !important',
+                  background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
+                  color: '#1a237e !important',
                 },
               }}
             />
