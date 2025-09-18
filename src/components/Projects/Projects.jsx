@@ -98,18 +98,23 @@ const Projects = () => {
                 '&.Mui-selected': {
                   color: 'primary.main',
                 },
-                '&[value="dataAnalysis"].Mui-selected': {
-                  color: '#FFD700 !important',
-                },
                 '&:hover': {
                   color: '#FFFFFF',
                 }
+              },
+              '& .MuiTab-root:first-of-type.Mui-selected': {
+                color: '#FFD700 !important',
               },
             }}
           >
             <Tab 
               value="dataAnalysis" 
               label="Data Analysis"
+              sx={{
+                '&.Mui-selected': {
+                  color: '#FFD700 !important',
+                },
+              }}
             />
             <Tab 
               value="aiEngineering" 
