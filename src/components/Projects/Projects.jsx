@@ -102,8 +102,8 @@ const Projects = () => {
                   color: '#FFFFFF',
                 }
               },
-              '& .MuiTab-root:first-of-type.Mui-selected': {
-                color: '#FFD700 !important',
+              '& .MuiTab-root:not(:first-of-type).Mui-selected': {
+                color: 'primary.main',
               },
             }}
           >
@@ -113,14 +113,21 @@ const Projects = () => {
               sx={{
                 background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
                 color: '#1a237e !important',
-                fontWeight: 600,
+                fontWeight: '600 !important',
                 borderRadius: 1,
                 mx: 0.5,
                 '&:hover': {
                   background: 'linear-gradient(135deg, #FFE55C 0%, #FFB347 50%, #FF9500 100%)',
+                  color: '#1a237e !important',
                 },
                 '&.Mui-selected': {
                   background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
+                  color: '#1a237e !important',
+                },
+                '& .MuiTab-wrapper': {
+                  color: '#1a237e !important',
+                },
+                '& span': {
                   color: '#1a237e !important',
                 },
               }}
