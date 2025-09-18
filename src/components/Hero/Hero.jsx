@@ -86,8 +86,8 @@ const Hero = () => {
               e.target.play().catch(e => console.error('Error playing video:', e));
             }}
           >
-            <source src="/images/projects/hero/hero-video.webm" type="video/webm" />
-            <source src="/images/projects/hero/hero-video.mp4" type="video/mp4" />
+            <source src={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`} type="video/webm" />
+            <source src={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.mp4`} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </Box>
