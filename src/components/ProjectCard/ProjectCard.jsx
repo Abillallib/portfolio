@@ -92,6 +92,8 @@ const ProjectCard = ({ project = {}, onPreview, onViewDetails }) => {
           component="img"
           image={image}
           alt={title}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
           sx={{
             position: 'absolute',
             top: 0,
@@ -100,6 +102,14 @@ const ProjectCard = ({ project = {}, onPreview, onViewDetails }) => {
             height: '100%',
             objectFit: 'cover',
             transition: 'transform 0.5s ease',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            pointerEvents: 'none',
+            '&::selection': {
+              background: 'transparent',
+            },
           }}
         />
         <Box 
@@ -245,22 +255,38 @@ const ProjectCard = ({ project = {}, onPreview, onViewDetails }) => {
         </Stack>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto' }}>
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(project.githubUrl, '_blank');
-            }}
-            sx={{
-              color: 'rgba(255, 255, 255, 0.7)',
-              '&:hover': {
-                color: '#FFFFFF',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)'
-              }
-            }}
-          >
-            <GitHub fontSize="small" />
-          </IconButton>
+          {project.githubUrl ? (
+            <IconButton
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(project.githubUrl, '_blank');
+              }}
+              sx={{
+                color: 'rgba(255, 255, 255, 0.7)',
+                '&:hover': {
+                  color: '#FFFFFF',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }
+              }}
+            >
+              <GitHub fontSize="small" />
+            </IconButton>
+          ) : (
+            <IconButton
+              size="small"
+              disabled
+              sx={{
+                color: 'rgba(255, 255, 255, 0.3)',
+                cursor: 'not-allowed',
+                '&.Mui-disabled': {
+                  color: 'rgba(255, 255, 255, 0.3)',
+                }
+              }}
+            >
+              <GitHub fontSize="small" />
+            </IconButton>
+          )}
 
           <Tooltip title="View Project" arrow>
             <IconButton

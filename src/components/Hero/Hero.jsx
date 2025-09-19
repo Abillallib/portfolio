@@ -61,11 +61,26 @@ const Hero = () => {
               top: { xs: '8px', md: '10px' }, // Match the 10px margin on md screens
               left: 0,
               width: '100%',
-              height: 'calc(100% + 1px)',
+              height: '100%',
               objectFit: 'cover',
-              objectPosition: 'center top',
-              transform: 'translateY(-0.5px)',
-              overflow: 'hidden',
+              borderRadius: 2,
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              MozUserSelect: 'none',
+              msUserSelect: 'none',
+              pointerEvents: 'none',
+              '&::-webkit-media-controls': {
+                display: 'none !important',
+              },
+              '&::-webkit-media-controls-panel': {
+                display: 'none !important',
+              },
+              '&::-webkit-media-controls-play-button': {
+                display: 'none !important',
+              },
+              '&::-webkit-media-controls-start-playback-button': {
+                display: 'none !important',
+              },
             },
           }}
         >
@@ -75,6 +90,9 @@ const Hero = () => {
             muted
             playsInline
             preload="auto"
+            controlsList="nodownload nofullscreen noremoteplayback"
+            disablePictureInPicture
+            onContextMenu={(e) => e.preventDefault()}
             onError={(e) => console.error('Video error:', e)}
             onEnded={(e) => {
               console.log('Video ended, restarting...');

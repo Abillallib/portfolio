@@ -20,7 +20,7 @@ const Footer = () => {
         © {year} Adjaynae Billings. All rights reserved.
       </Typography>
       <Stack direction="row" spacing={1} justifyContent="center">
-        <IconButton color="inherit" component="a" href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <IconButton color="inherit" component="a" href="https://github.com/Abillallib" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
           <GitHubIcon />
         </IconButton>
         <IconButton color="inherit" component="a" href="https://www.linkedin.com/in/adjaynae-billings" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">

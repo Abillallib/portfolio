@@ -60,12 +60,21 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
           component="img"
           src={project.image}
           alt={project.title}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
           sx={{
             width: '100%',
             height: 200,
             objectFit: 'cover',
             borderRadius: 1,
-            mb: 3
+            mb: 3,
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            '&::selection': {
+              background: 'transparent',
+            },
           }}
         />
 

@@ -68,39 +68,77 @@ const ProjectDetail = ({ project, onBack }) => {
           </Typography>
 
           <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
-            <Button
-              variant="contained"
-              startIcon={<Launch />}
-              onClick={() => window.open(project.demoUrl, '_blank')}
-              sx={{
-                backgroundColor: 'primary.main',
-                color: '#0A1929',
-                fontWeight: 600,
-                '&:hover': { 
-                  backgroundColor: 'primary.dark',
-                  transform: 'translateY(-2px)'
-                }
-              }}
-            >
-              Live Demo
-            </Button>
+            {project.demoUrl && project.demoUrl !== '#' ? (
+              <Button
+                variant="contained"
+                startIcon={<Launch />}
+                onClick={() => window.open(project.demoUrl, '_blank')}
+                sx={{
+                  backgroundColor: 'primary.main',
+                  color: '#0A1929',
+                  fontWeight: 600,
+                  '&:hover': { 
+                    backgroundColor: 'primary.dark',
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                Live Demo
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                startIcon={<Assessment />}
+                disabled
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  borderColor: 'rgba(255, 255, 255, 0.2)',
+                  cursor: 'not-allowed',
+                  '&.Mui-disabled': {
+                    color: 'rgba(255, 255, 255, 0.5)',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                  }
+                }}
+              >
+                No Demo Available
+              </Button>
+            )}
             
-            <Button
-              variant="outlined"
-              startIcon={<GitHub />}
-              onClick={() => window.open(project.githubUrl, '_blank')}
-              sx={{
-                color: '#FFFFFF',
-                borderColor: 'rgba(255, 255, 255, 0.3)',
-                '&:hover': {
-                  borderColor: 'primary.main',
-                  backgroundColor: 'rgba(100, 255, 218, 0.1)',
-                  color: 'primary.main'
-                }
-              }}
-            >
-              Source Code
-            </Button>
+            {project.githubUrl ? (
+              <Button
+                variant="outlined"
+                startIcon={<GitHub />}
+                onClick={() => window.open(project.githubUrl, '_blank')}
+                sx={{
+                  color: '#FFFFFF',
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    backgroundColor: 'rgba(100, 255, 218, 0.1)',
+                    color: 'primary.main'
+                  }
+                }}
+              >
+                View Code
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                startIcon={<GitHub />}
+                disabled
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  borderColor: 'rgba(255, 255, 255, 0.2)',
+                  cursor: 'not-allowed',
+                  '&.Mui-disabled': {
+                    color: 'rgba(255, 255, 255, 0.5)',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                  }
+                }}
+              >
+                No Code Available
+              </Button>
+            )}
           </Stack>
         </Box>
 
@@ -125,6 +163,8 @@ const ProjectDetail = ({ project, onBack }) => {
                 component="img"
                 src={project.image}
                 alt={project.title}
+                onContextMenu={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
                 sx={{
                   position: 'absolute',
                   top: 0,
@@ -132,7 +172,14 @@ const ProjectDetail = ({ project, onBack }) => {
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  objectPosition: 'center'
+                  objectPosition: 'center',
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none',
+                  MozUserSelect: 'none',
+                  msUserSelect: 'none',
+                  '&::selection': {
+                    background: 'transparent',
+                  },
                 }}
               />
             </Box>
