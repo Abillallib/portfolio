@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { Link } from 'react-scroll';
 import MenuIcon from '@mui/icons-material/Menu';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import { styled } from '@mui/material/styles';
 
 const Header = () => {
@@ -86,6 +87,24 @@ const Header = () => {
           >
             Contact
           </Button>
+          
+          {/* GitHub Button */}
+          <IconButton
+            component="a"
+            href="https://github.com/Abillallib"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              color: '#FFFFFF',
+              ml: 1,
+              '&:hover': {
+                color: 'primary.main',
+                backgroundColor: 'rgba(100, 255, 218, 0.1)'
+              }
+            }}
+          >
+            <GitHubIcon />
+          </IconButton>
         </Box>
 
         {/* Mobile menu button (xs to sm) */}
@@ -163,6 +182,16 @@ const Header = () => {
             sx={{ color: '#FFFFFF' }}
           >
             Contact
+          </MenuItem>
+          <MenuItem
+            component="a"
+            href="https://github.com/Abillallib"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleMenuClose}
+            sx={{ color: '#FFFFFF' }}
+          >
+            GitHub
           </MenuItem>
         </Menu>
       </Toolbar>

@@ -11,7 +11,7 @@ import {
   Divider,
   Button
 } from '@mui/material';
-import { Close, Launch, GitHub, OpenInNew } from '@mui/icons-material';
+import { Close, Launch, GitHub, OpenInNew, Assessment } from '@mui/icons-material';
 
 const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
   if (!project) return null;
@@ -102,8 +102,13 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
                   border: '1px solid rgba(100, 255, 218, 0.1)',
                   borderRadius: 1,
                   p: 2,
-                  minWidth: 120,
+                  minWidth: 140,
+                  width: 140,
+                  height: 80,
                   textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                   transition: 'all 0.3s ease',
                   '&:hover': {
                     transform: 'translateY(-2px)',
@@ -111,10 +116,18 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
                   }
                 }}
               >
-                <Typography variant="h6" sx={{ color: '#64ffda', fontWeight: 600 }}>
+                <Typography variant="h6" sx={{ color: '#64ffda', fontWeight: 600, mb: 0.5 }}>
                   {value}
                 </Typography>
-                <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)', textTransform: 'capitalize' }}>
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    color: 'rgba(255, 255, 255, 0.6)', 
+                    textTransform: 'capitalize',
+                    fontSize: '0.7rem',
+                    lineHeight: 1.2
+                  }}
+                >
                   {key.replace(/([A-Z])/g, ' $1').trim()}
                 </Typography>
               </Box>
@@ -148,39 +161,77 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Stack direction="row" spacing={2}>
-            <Button
-              variant="contained"
-              startIcon={<Launch />}
-              onClick={() => window.open(project.demoUrl, '_blank')}
-              sx={{
-                backgroundColor: 'primary.main',
-                color: '#0A1929',
-                fontWeight: 600,
-                '&:hover': { 
-                  backgroundColor: 'primary.dark',
-                  transform: 'translateY(-2px)'
-                }
-              }}
-            >
-              Live Demo
-            </Button>
+            {project.demoUrl ? (
+              <Button
+                variant="contained"
+                startIcon={<Launch />}
+                onClick={() => window.open(project.demoUrl, '_blank')}
+                sx={{
+                  backgroundColor: 'primary.main',
+                  color: '#0A1929',
+                  fontWeight: 600,
+                  '&:hover': { 
+                    backgroundColor: 'primary.dark',
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+              >
+                Live Demo
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                startIcon={<Assessment />}
+                disabled
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  borderColor: 'rgba(255, 255, 255, 0.2)',
+                  cursor: 'not-allowed',
+                  '&.Mui-disabled': {
+                    color: 'rgba(255, 255, 255, 0.5)',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                  }
+                }}
+              >
+                No Demo Available
+              </Button>
+            )}
             
-            <Button
-              variant="outlined"
-              startIcon={<GitHub />}
-              onClick={() => window.open(project.githubUrl, '_blank')}
-              sx={{
-                color: '#FFFFFF',
-                borderColor: 'rgba(255, 255, 255, 0.3)',
-                '&:hover': {
-                  borderColor: 'primary.main',
-                  backgroundColor: 'rgba(100, 255, 218, 0.1)',
-                  color: 'primary.main'
-                }
-              }}
-            >
-              Source Code
-            </Button>
+            {project.githubUrl ? (
+              <Button
+                variant="outlined"
+                startIcon={<GitHub />}
+                onClick={() => window.open(project.githubUrl, '_blank')}
+                sx={{
+                  color: '#FFFFFF',
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    backgroundColor: 'rgba(100, 255, 218, 0.1)',
+                    color: 'primary.main'
+                  }
+                }}
+              >
+                Source Code
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                startIcon={<GitHub />}
+                disabled
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  borderColor: 'rgba(255, 255, 255, 0.2)',
+                  cursor: 'not-allowed',
+                  '&.Mui-disabled': {
+                    color: 'rgba(255, 255, 255, 0.5)',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                  }
+                }}
+              >
+                No Code Available
+              </Button>
+            )}
           </Stack>
 
           <Button
