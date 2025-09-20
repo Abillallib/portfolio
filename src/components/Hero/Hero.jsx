@@ -72,7 +72,7 @@ const Hero = () => {
         width: '100%',
         maxWidth: '1400px',
         alignItems: 'flex-start',
-        pt: { xs: 4, md: 8 }
+        // Removed pt: { xs: 4, md: 8 } to move video closer to top
       }}>
         {/* Video Column */}
         <Box 
