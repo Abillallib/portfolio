@@ -93,7 +93,11 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
           <Typography variant="h6" sx={{ color: '#FFFFFF', mb: 2, fontWeight: 600 }}>
             Key Metrics
           </Typography>
-          <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 2 }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={{ xs: 2, md: 2 }}
+            sx={{ flexWrap: { xs: 'nowrap', md: 'wrap' }, gap: { xs: 2, md: 2 } }}
+          >
             {Object.entries(project.metrics).map(([key, value]) => (
               <Box
                 key={key}
@@ -102,9 +106,9 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
                   border: '1px solid rgba(100, 255, 218, 0.1)',
                   borderRadius: 1,
                   p: 2,
-                  minWidth: 140,
-                  width: 140,
-                  height: 80,
+                  minWidth: { xs: '100%', md: 140 },
+                  width: { xs: '100%', md: 140 },
+                  height: { xs: 100, md: 80 },
                   textAlign: 'center',
                   display: 'flex',
                   flexDirection: 'column',
