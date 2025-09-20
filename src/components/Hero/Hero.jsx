@@ -22,11 +22,12 @@ const Hero = () => {
         alignItems: 'center',
         background: 'transparent',
         position: 'relative',
-        py: 0,
+        py: { xs: 4, md: 6 },
         px: { xs: 2, sm: 4 },
         maxWidth: '2000px',
         mx: 'auto',
         zIndex: 2,
+        pb: { xs: 8, md: 0 }
       }}
     >
       <Box sx={{ 
@@ -218,8 +219,8 @@ const Hero = () => {
           width: '90%',
           mx: 'auto',
           borderColor: 'rgba(255, 255, 255, 0.1)',
-          mt: { xs: 6, md: 8 },
-          mb: { xs: 4, md: 6 }
+          mt: { xs: 12, md: 8 },
+          mb: { xs: 16, md: 6 }
         }}
       />
     </Box>
