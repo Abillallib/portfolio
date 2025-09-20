@@ -76,7 +76,7 @@ const Hero = () => {
             width: '100%',
             maxWidth: { xs: '100%', md: '700px' }, // Increased from 600px to 700px
             overflow: 'hidden',
-            marginTop: { xs: 2, md: 2.5 }, // 10px on md screens (2.5 * 4px = 10px)
+            marginTop: { xs: 0, md: 2.5 }, // 10px on md screens (2.5 * 4px = 10px)
             '@media (min-width: 900px) and (max-width: 1199px)': {
               transform: 'scale(1.05)',
               transformOrigin: 'left top',
@@ -222,7 +222,25 @@ const Hero = () => {
           </Tabs>
 
           <Fade in key={activeTab} timeout={400}>
-            <Slide in key={activeTab} direction="up" timeout={400} mountOnEnter unmountOnExit>
+            <Slide
+              in={true}
+              key={activeTab}
+              direction="up"
+              timeout={400}
+              mountOnEnter
+              unmountOnExit
+              container={null}
+              sx={{
+                transform: 'translateY(16px)',
+                transition: 'transform 400ms ease-in-out',
+                '&.MuiSlide-entered': {
+                  transform: 'translateY(0)',
+                },
+                '&.MuiSlide-exiting': {
+                  transform: 'translateY(16px)',
+                }
+              }}
+            >
               <Typography
                 variant="h5"
                 component="p"
