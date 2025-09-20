@@ -26,16 +26,19 @@ const useVideoOptimization = (baseVideoSrc) => {
   const qualityCheckTimeoutRef = useRef(null);
   const bufferMonitorRef = useRef(null);
   const retryCountRef = useRef(0);
+  const hasInitializedRef = useRef(false); // Prevent quality switching after initial load
   const maxRetries = 3;
 
-  // Memoized video ready callback - defined at hook level
+  // Memoized video ready callback with guard to prevent double-triggering
   const handleVideoReady = useCallback(() => {
     console.log('Video optimization system reports ready');
-    // Add a small delay to ensure smooth transition
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-  }, []);
+    // Only set loading to false if currently loading (prevents double-triggering)
+    if (isLoading) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
+  }, [isLoading]);
 
   // Detect device capabilities and connection speed
   const detectCapabilities = useCallback(() => {
@@ -238,19 +241,24 @@ const useVideoOptimization = (baseVideoSrc) => {
     };
   }, [detectCapabilities, getVideoSrc, monitorBuffer, retryWithFallback]);
 
-  // Initialize on mount
+  // Initialize on mount - use ref to prevent double initialization
   useEffect(() => {
-    const cleanup = initializeVideo();
-    return cleanup;
-  }, [initializeVideo]);
+    if (!hasInitializedRef.current && videoRef.current) {
+      hasInitializedRef.current = true;
+      const cleanup = initializeVideo();
+      return cleanup;
+    }
+  }, [initializeVideo]); // Keep original dependencies but use ref guard
 
-  // Handle quality changes
+  // Handle quality changes - DISABLED after initial load to prevent flickering
   useEffect(() => {
-    if (videoRef.current && !isLoading) {
+    // Only allow quality changes if not yet initialized (prevents post-load switching)
+    if (videoRef.current && !isLoading && !hasInitializedRef.current) {
       const video = videoRef.current;
       const newSrc = getVideoSrc(videoQuality);
       if (newSrc && newSrc !== video.src) {
         console.log(`Switching video quality to: ${videoQuality}`);
+        setIsLoading(true);
         video.src = newSrc;
         video.load();
       }
