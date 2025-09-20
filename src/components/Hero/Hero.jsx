@@ -260,7 +260,7 @@ const Hero = () => {
           mx: 'auto',
           borderColor: 'rgba(255, 255, 255, 0.1)',
           mt: { xs: 12, md: 8 },
-          mb: { xs: 16, md: 6 }
+          mb: { xs: 8, md: 6 } // 64px mobile, 48px desktop - reduced for mobile
         }}
       />
     </Box>
