@@ -446,6 +446,34 @@ const ProjectDetail = ({ project, onBack }) => {
             </Card>
           </Grid>
         </Grid>
+
+        {/* Bottom Navigation */}
+        <Box sx={{
+          mt: 6,
+          pt: 4,
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+          textAlign: 'center'
+        }}>
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={onBack}
+            sx={{
+              color: 'rgba(255, 255, 255, 0.7)',
+              fontSize: '1.1rem',
+              fontWeight: 500,
+              py: 1.5,
+              px: 3,
+              '&:hover': {
+                color: '#FFFFFF',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                transform: 'translateY(-1px)'
+              },
+              transition: 'all 0.3s ease'
+            }}
+          >
+            ← Back to Projects
+          </Button>
+        </Box>
       </Container>
     </Box>
   );
