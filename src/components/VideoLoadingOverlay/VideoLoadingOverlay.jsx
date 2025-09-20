@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+
 import { Box, Typography, LinearProgress } from '@mui/material';
 import { RocketLaunch as RocketIcon } from '@mui/icons-material';
 import Particles from 'react-particles';
@@ -6,8 +7,37 @@ import { loadFull } from 'tsparticles';
 
 const VideoLoadingOverlay = ({ isVisible, onVideoReady, videoSrc }) => {
   const [progress, setProgress] = useState(0);
-  const [loadingStage, setLoadingStage] = useState('Initializing...');
+  const [loadingStage, setLoadingStage] = useState('Preparing experience...');
   const videoRef = useRef(null);
+  const progressTimeoutRef = useRef(null);
+  const cleanupFunctionsRef = useRef([]);
+
+  // Smooth progress update that prevents backward jumping
+  const updateProgress = useCallback((newProgress) => {
+    setProgress(prev => {
+      // Never allow progress to decrease
+      const clampedProgress = Math.max(prev, Math.min(newProgress, 100));
+      return clampedProgress;
+    });
+  }, []);
+
+  // Debounced progress update to prevent rapid changes
+  const debouncedProgressUpdate = useCallback((targetProgress) => {
+    if (progressTimeoutRef.current) {
+      clearTimeout(progressTimeoutRef.current);
+    }
+
+    progressTimeoutRef.current = setTimeout(() => {
+      updateProgress(targetProgress);
+    }, 100); // 100ms debounce
+
+    // Store cleanup function
+    cleanupFunctionsRef.current.push(() => {
+      if (progressTimeoutRef.current) {
+        clearTimeout(progressTimeoutRef.current);
+      }
+    });
+  }, [updateProgress]);
 
   const particlesInit = async (main) => {
     await loadFull(main);
@@ -16,73 +46,148 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, videoSrc }) => {
   useEffect(() => {
     if (!isVisible || !videoSrc) return;
 
-    // Create a hidden video element to track real loading progress
-    const video = document.createElement('video');
-    video.preload = 'auto';
-    video.muted = true;
+    let isVideoReady = false;
+    let maxProgressReached = 0;
 
-    // Add event listeners for real progress tracking
-    video.addEventListener('loadstart', () => {
+    // Create single video instance (prevents multiple videos)
+    if (!videoRef.current) {
+      videoRef.current = document.createElement('video');
+      videoRef.current.preload = 'auto';
+      videoRef.current.muted = true;
+    }
+
+    const video = videoRef.current;
+
+    // Phase 1: Connection
+    const handleLoadStart = () => {
       setLoadingStage('Preparing experience...');
-      setProgress(10);
-    });
+      debouncedProgressUpdate(10);
+    };
 
-    video.addEventListener('loadedmetadata', () => {
+    // Phase 2: Metadata loaded
+    const handleMetadata = () => {
       setLoadingStage('Loading content...');
-      setProgress(30);
-    });
+      debouncedProgressUpdate(30);
+    };
 
-    video.addEventListener('loadeddata', () => {
+    // Phase 3: Initial data
+    const handleDataLoaded = () => {
       setLoadingStage('Almost ready...');
-      setProgress(50);
-    });
+      debouncedProgressUpdate(50);
+    };
 
-    video.addEventListener('canplay', () => {
+    // Phase 4: Can play
+    const handleCanPlay = () => {
       setLoadingStage('Finalizing...');
-      setProgress(80);
-    });
+      debouncedProgressUpdate(80);
+    };
 
-    video.addEventListener('canplaythrough', () => {
+    // Phase 5: Full loading - most important event
+    const handleCanPlayThrough = () => {
       setLoadingStage('Complete!');
-      setProgress(100);
-      // Small delay to show 100% completion before hiding
+      isVideoReady = true;
+      debouncedProgressUpdate(100);
+
+      // Wait a moment to show 100%, then check if video is truly ready
       setTimeout(() => {
-        onVideoReady();
-      }, 500);
-    });
-
-    video.addEventListener('progress', () => {
-      if (video.buffered.length > 0) {
-        const buffered = video.buffered.end(video.buffered.length - 1);
-        const duration = video.duration;
-        if (duration > 0) {
-          const bufferedPercent = (buffered / duration) * 100;
-          // Update progress between 50-90% based on real buffering
-          const newProgress = Math.min(90, Math.max(50, bufferedPercent));
-          setProgress(newProgress);
+        if (isVideoReady) {
+          onVideoReady();
         }
+      }, 800);
+    };
+
+    // Phase 6: Real buffering progress (smoothed)
+    const handleProgress = () => {
+      try {
+        if (video.buffered.length > 0) {
+          const buffered = video.buffered.end(video.buffered.length - 1);
+          const duration = video.duration;
+
+          if (duration > 0 && !isNaN(duration)) {
+            const bufferedPercent = (buffered / duration) * 100;
+            // Smooth progress between 50-90% based on real buffering
+            const targetProgress = Math.min(90, Math.max(50, bufferedPercent));
+            
+            // Only update if this is higher than current progress
+            if (targetProgress > maxProgressReached) {
+              maxProgressReached = targetProgress;
+              debouncedProgressUpdate(targetProgress);
+            }
+          }
+        }
+      } catch (error) {
+        // Silently handle buffering calculation errors
+        console.debug('Buffering calculation error:', error);
       }
-    });
+    };
 
-    video.addEventListener('error', () => {
-      console.error('Video loading error');
-      setLoadingStage('Error loading video');
-      setProgress(0);
-    });
+    // Error handling
+    const handleError = (error) => {
+      console.error('Video loading error:', error);
+      setLoadingStage('Retrying...');
+      // Don't reset progress on error, just show error state
+    };
 
-    // Set video source and start real loading
+    // Safety timeout - maximum loading time
+    const safetyTimeout = setTimeout(() => {
+      if (!isVideoReady) {
+        console.log('Video loading timeout reached, forcing completion');
+        isVideoReady = true;
+        debouncedProgressUpdate(100);
+        setTimeout(() => {
+          if (isVideoReady) {
+            onVideoReady();
+          }
+        }, 500);
+      }
+    }, 15000); // 15 second max loading time
+
+    // Add event listeners
+    video.addEventListener('loadstart', handleLoadStart);
+    video.addEventListener('loadedmetadata', handleMetadata);
+    video.addEventListener('loadeddata', handleDataLoaded);
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('canplaythrough', handleCanPlayThrough);
+    video.addEventListener('progress', handleProgress);
+    video.addEventListener('error', handleError);
+
+    // Set video source to start loading
     video.src = videoSrc;
-    videoRef.current = video;
 
     // Cleanup function
     return () => {
+      clearTimeout(safetyTimeout);
+      
+      // Clean up all timeouts
+      cleanupFunctionsRef.current.forEach(cleanup => cleanup());
+      cleanupFunctionsRef.current = [];
+
+      // Remove event listeners
+      video.removeEventListener('loadstart', handleLoadStart);
+      video.removeEventListener('loadedmetadata', handleMetadata);
+      video.removeEventListener('loadeddata', handleDataLoaded);
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('canplaythrough', handleCanPlayThrough);
+      video.removeEventListener('progress', handleProgress);
+      video.removeEventListener('error', handleError);
+
+      // Clean up video
       if (videoRef.current) {
         videoRef.current.pause();
         videoRef.current.removeAttribute('src');
         videoRef.current.load();
       }
     };
-  }, [isVisible, videoSrc, onVideoReady]);
+  }, [isVisible, videoSrc, onVideoReady, debouncedProgressUpdate]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      cleanupFunctionsRef.current.forEach(cleanup => cleanup());
+      cleanupFunctionsRef.current = [];
+    };
+  }, []);
+
 
   if (!isVisible) return null;
 
