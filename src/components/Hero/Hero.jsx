@@ -37,6 +37,7 @@ const Hero = () => {
       <VideoLoadingOverlay
         isVisible={isVideoLoading}
         onVideoReady={handleVideoCanPlayThrough}
+        videoSrc={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`}
       />
 
       <Box
@@ -124,16 +125,10 @@ const Hero = () => {
             disablePictureInPicture
             onContextMenu={(e) => e.preventDefault()}
             onError={(e) => console.error('Video error:', e)}
-            onLoadStart={handleVideoLoadStart}
-            onCanPlayThrough={handleVideoCanPlayThrough}
             onEnded={(e) => {
               console.log('Video ended, restarting...');
               e.target.currentTime = 0;
               e.target.play().catch(e => console.error('Error replaying video:', e));
-            }}
-            onCanPlay={(e) => {
-              console.log('Video can play, starting...');
-              e.target.play().catch(e => console.error('Error playing video:', e));
             }}
           >
             <source src={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`} type="video/webm" />

@@ -1,31 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, LinearProgress } from '@mui/material';
 import { RocketLaunch as RocketIcon } from '@mui/icons-material';
 import Particles from 'react-particles';
 import { loadFull } from 'tsparticles';
 
-const VideoLoadingOverlay = ({ isVisible, onVideoReady }) => {
+const VideoLoadingOverlay = ({ isVisible, onVideoReady, videoSrc }) => {
   const [progress, setProgress] = useState(0);
+  const [loadingStage, setLoadingStage] = useState('Initializing...');
+  const videoRef = useRef(null);
 
   const particlesInit = async (main) => {
     await loadFull(main);
   };
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || !videoSrc) return;
 
-    // Simulate progress loading
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => {
-        if (prevProgress >= 90) {
-          return prevProgress;
+    // Create a hidden video element to track real loading progress
+    const video = document.createElement('video');
+    video.preload = 'auto';
+    video.muted = true;
+
+    // Add event listeners for real progress tracking
+    video.addEventListener('loadstart', () => {
+      setLoadingStage('Preparing experience...');
+      setProgress(10);
+    });
+
+    video.addEventListener('loadedmetadata', () => {
+      setLoadingStage('Loading content...');
+      setProgress(30);
+    });
+
+    video.addEventListener('loadeddata', () => {
+      setLoadingStage('Almost ready...');
+      setProgress(50);
+    });
+
+    video.addEventListener('canplay', () => {
+      setLoadingStage('Finalizing...');
+      setProgress(80);
+    });
+
+    video.addEventListener('canplaythrough', () => {
+      setLoadingStage('Complete!');
+      setProgress(100);
+      // Small delay to show 100% completion before hiding
+      setTimeout(() => {
+        onVideoReady();
+      }, 500);
+    });
+
+    video.addEventListener('progress', () => {
+      if (video.buffered.length > 0) {
+        const buffered = video.buffered.end(video.buffered.length - 1);
+        const duration = video.duration;
+        if (duration > 0) {
+          const bufferedPercent = (buffered / duration) * 100;
+          // Update progress between 50-90% based on real buffering
+          const newProgress = Math.min(90, Math.max(50, bufferedPercent));
+          setProgress(newProgress);
         }
-        return prevProgress + Math.random() * 15;
-      });
-    }, 200);
+      }
+    });
 
-    return () => clearInterval(timer);
-  }, [isVisible]);
+    video.addEventListener('error', () => {
+      console.error('Video loading error');
+      setLoadingStage('Error loading video');
+      setProgress(0);
+    });
+
+    // Set video source and start real loading
+    video.src = videoSrc;
+    videoRef.current = video;
+
+    // Cleanup function
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.removeAttribute('src');
+        videoRef.current.load();
+      }
+    };
+  }, [isVisible, videoSrc, onVideoReady]);
 
   if (!isVisible) return null;
 
@@ -45,7 +102,7 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady }) => {
         zIndex: 9999,
       }}
     >
-      {/* Particle Background */}
+      {/* Particle Background - Same as before */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -128,7 +185,7 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady }) => {
         />
       </div>
 
-      {/* Loading Content */}
+      {/* Loading Content - Exact same visual design */}
       <Box
         sx={{
           textAlign: 'center',
@@ -137,7 +194,7 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady }) => {
           maxWidth: 400
         }}
       >
-        {/* Rocket Icon */}
+        {/* Rocket Icon - Same animation and styling */}
         <Box
           sx={{
             mb: 3,
@@ -155,13 +212,13 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady }) => {
           />
         </Box>
 
-        {/* Loading Text */}
+        {/* Loading Text - Same typography */}
         <Typography
           variant="h4"
           sx={{
             color: '#FFFFFF',
             fontWeight: 700,
-            mb: 2,
+            mb: 1,
             fontSize: { xs: '1.5rem', md: '2rem' }
           }}
         >
@@ -172,13 +229,14 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady }) => {
           variant="body1"
           sx={{
             color: 'rgba(255, 255, 255, 0.7)',
-            mb: 4
+            mb: 4,
+            minHeight: '1.5rem'
           }}
         >
-          Preparing your immersive experience...
+          {loadingStage}
         </Typography>
 
-        {/* Progress Bar */}
+        {/* Progress Bar - Same Material-UI styling */}
         <Box sx={{ width: '100%', mb: 2 }}>
           <LinearProgress
             variant="determinate"
@@ -195,7 +253,7 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady }) => {
           />
         </Box>
 
-        {/* Percentage */}
+        {/* Percentage - Same styling */}
         <Typography
           variant="h6"
           sx={{
@@ -207,6 +265,7 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady }) => {
         </Typography>
       </Box>
 
+      {/* Same CSS animation */}
       <style jsx>{`
         @keyframes rocketFloat {
           0%, 100% {
