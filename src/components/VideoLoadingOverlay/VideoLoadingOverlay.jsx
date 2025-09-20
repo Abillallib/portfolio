@@ -8,35 +8,23 @@ import { loadFull } from 'tsparticles';
 const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
   const [progress, setProgress] = useState(0);
   const [loadingStage, setLoadingStage] = useState('Preparing experience...');
-  const [isExiting, setIsExiting] = useState(false);
   const [shouldRender, setShouldRender] = useState(isVisible);
 
-  // Handle visibility changes with smooth transitions
+  // Handle visibility changes with immediate removal (no fade-out)
   useEffect(() => {
     if (isVisible) {
       setShouldRender(true);
-      setIsExiting(false);
       setProgress(0);
       setLoadingStage('Preparing experience...');
     } else if (shouldRender) {
-      // Start exit animation
-      setIsExiting(true);
-      setProgress(100);
-      setLoadingStage('Complete!');
-      
-      // Remove from DOM after animation
-      const exitTimer = setTimeout(() => {
-        setShouldRender(false);
-        setIsExiting(false);
-      }, 800); // Match transition duration
-      
-      return () => clearTimeout(exitTimer);
+      // Immediate removal - no exit animation
+      setShouldRender(false);
     }
   }, [isVisible, shouldRender]);
 
   // Simple progress simulation for smooth UX
   useEffect(() => {
-    if (!isVisible || isExiting) return;
+    if (!isVisible) return;
 
     let currentProgress = 0;
     const interval = setInterval(() => {
@@ -52,10 +40,10 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
 
     // Update loading stages
     const stageTimeout1 = setTimeout(() => {
-      if (!isExiting) setLoadingStage('Loading content...');
+      if (isVisible) setLoadingStage('Loading content...');
     }, 1000);
     const stageTimeout2 = setTimeout(() => {
-      if (!isExiting) setLoadingStage('Almost ready...');
+      if (isVisible) setLoadingStage('Almost ready...');
     }, 2000);
 
     return () => {
@@ -63,7 +51,7 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
       clearTimeout(stageTimeout1);
       clearTimeout(stageTimeout2);
     };
-  }, [isVisible, isExiting]);
+  }, [isVisible]);
 
   const particlesInit = async (main) => {
     await loadFull(main);
