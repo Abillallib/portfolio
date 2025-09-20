@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Typography, Tabs, Tab, Fade, Slide, Divider } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Tabs,
+  Tab,
+  Fade,
+  Slide,
+  Divider
+} from '@mui/material';
+import VideoLoadingOverlay from '../VideoLoadingOverlay/VideoLoadingOverlay';
 
 const Hero = () => {
   const [activeTab, setActiveTab] = useState('analyst');
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
 
   const handleTabChange = (_e, value) => setActiveTab(value);
 
@@ -11,25 +21,44 @@ const Hero = () => {
     engineer: 'I build intelligent tools and automation that scale insights and streamline workflows.',
   };
 
+  const handleVideoCanPlayThrough = () => {
+    console.log('Video can play through, hiding loading screen...');
+    setIsVideoLoading(false);
+  };
+
+  const handleVideoLoadStart = () => {
+    console.log('Video loading started...');
+    setIsVideoLoading(true);
+  };
+
   return (
-    <Box
-      component="section"
-      sx={{
-        minHeight: { xs: '85vh', md: '100vh' },
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: 'transparent',
-        position: 'relative',
-        py: { xs: 4, md: 6 },
-        px: { xs: 2, sm: 4 },
-        maxWidth: '2000px',
-        mx: 'auto',
-        zIndex: 2,
-        pb: { xs: 8, md: 0 }
-      }}
-    >
+    <>
+      {/* Loading Overlay */}
+      <VideoLoadingOverlay
+        isVisible={isVideoLoading}
+        onVideoReady={handleVideoCanPlayThrough}
+      />
+
+      <Box
+        component="section"
+        sx={{
+          minHeight: { xs: '85vh', md: '100vh' },
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          background: 'transparent',
+          position: 'relative',
+          py: { xs: 4, md: 6 },
+          px: { xs: 2, sm: 4 },
+          maxWidth: '2000px',
+          mx: 'auto',
+          zIndex: 2,
+          pb: { xs: 8, md: 0 },
+          opacity: isVideoLoading ? 0 : 1,
+          transition: 'opacity 0.5s ease-in-out'
+        }}
+      >
       <Box sx={{ 
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
@@ -95,6 +124,8 @@ const Hero = () => {
             disablePictureInPicture
             onContextMenu={(e) => e.preventDefault()}
             onError={(e) => console.error('Video error:', e)}
+            onLoadStart={handleVideoLoadStart}
+            onCanPlayThrough={handleVideoCanPlayThrough}
             onEnded={(e) => {
               console.log('Video ended, restarting...');
               e.target.currentTime = 0;
@@ -224,6 +255,7 @@ const Hero = () => {
         }}
       />
     </Box>
+  </>
   );
 };
 

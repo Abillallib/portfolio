@@ -470,7 +470,7 @@ const ProjectDetail = ({ project, onBack }) => {
               transition: 'all 0.3s ease'
             }}
           >
-            ← Back to Projects
+            Back to Projects
           </Button>
         </Box>
       </Container>
