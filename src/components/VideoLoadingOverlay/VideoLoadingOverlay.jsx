@@ -74,8 +74,8 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 9999,
-        opacity: isExiting ? 0 : 1,
-        transition: 'opacity 0.8s ease-out',
+        opacity: 1, // Always fully visible when rendered
+        transition: 'none', // Remove transition to prevent mobile shifting
       }}
     >
       {/* Particle Background - Same as before */}

@@ -10,11 +10,7 @@ createRoot(document.getElementById('root')).render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalStyles styles={{
-        html: {
-          height: '100%'
-        },
         body: {
-          minHeight: '100%',
           /* layered radial highlights along the vertical to keep a subtle glow throughout */
           background: [
             'radial-gradient(circle at 50% 15%, rgba(35,35,70,0.85) 0%, rgba(10,25,41,0.0) 55%)',
@@ -26,12 +22,10 @@ createRoot(document.getElementById('root')).render(
           backgroundRepeat: 'no-repeat',
           scrollbarWidth: 'none',        /* Firefox */
           msOverflowStyle: 'none',       /* IE/Edge */
+          // Removed fixed height constraints to prevent mobile layout shifts
         },
         'body::-webkit-scrollbar': { width: 0, height: 0 }, /* Chrome/Safari */
         'body::-webkit-scrollbar-thumb': { background: 'transparent' },
-        '#root': {
-          minHeight: '100%'
-        }
       }} />
       <App />
     </ThemeProvider>

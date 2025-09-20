@@ -50,9 +50,7 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        '*': {
-          transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-        },
+        // Removed universal transition to prevent mobile menu shifting
         // Global section spacing - exclude hero section
         '#projects, #about, #contact': {
           padding: '40px 0 !important',
