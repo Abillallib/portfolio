@@ -43,7 +43,7 @@ const Projects = () => {
     <Box
       sx={{
         width: '100%',
-        pt: { xs: 4, md: 8 },
+        py: 8,
         pb: 8,
         position: 'relative',
       }}
