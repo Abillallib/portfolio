@@ -31,6 +31,13 @@ html, body, #root {
   background-color: #0A1929; /* Fallback background to match theme */
 }
 
+/* Mobile-specific background color to prevent purple footer */
+@media (max-width: 600px) {
+  html, body, #root {
+    background-color: #060e17; /* Dark navy blue for mobile */
+  }
+}
+
 body {
   margin: 0;
   min-width: 320px;

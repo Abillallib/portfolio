@@ -26,6 +26,16 @@ createRoot(document.getElementById('root')).render(
           minHeight: '100vh', // Ensure body covers full viewport height
           scrollbarWidth: 'none',        /* Firefox */
           msOverflowStyle: 'none',       /* IE/Edge */
+          // Mobile-specific background color to prevent purple footer
+          '@media (max-width: 600px)': {
+            backgroundColor: '#060e17', // Dark navy blue for mobile
+            background: [
+              'radial-gradient(circle at 50% 15%, rgba(35,35,70,0.85) 0%, rgba(10,25,41,0.0) 55%)',
+              'radial-gradient(circle at 50% 55%, rgba(35,35,70,0.6) 0%, rgba(10,25,41,0.0) 60%)',
+              'radial-gradient(circle at 50% 95%, rgba(35,35,70,0.5) 0%, rgba(10,25,41,0.0) 60%)',
+              '#060e17'
+            ].join(', '),
+          },
           // Removed fixed height constraints to prevent mobile layout shifts
         },
         'body::-webkit-scrollbar': { width: 0, height: 0 }, /* Chrome/Safari */
