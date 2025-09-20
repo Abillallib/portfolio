@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 const Header = () => {
@@ -99,9 +99,9 @@ const Header = () => {
         {/* Mobile menu button (xs to sm) */}
         <IconButton
           edge="end"
-          aria-label="menu"
-          onClick={handleMenuOpen}
-          sx={{ 
+          aria-label={menuOpen ? "close menu" : "open menu"}
+          onClick={menuOpen ? handleMenuClose : handleMenuOpen}
+          sx={{
             color: '#FFFFFF',
             display: { xs: 'inline-flex', md: 'none' },
             ml: 1,
@@ -110,7 +110,7 @@ const Header = () => {
             }
           }}
         >
-          <MenuIcon />
+          {menuOpen ? <CloseIcon /> : <MenuIcon />}
         </IconButton>
 
         {/* Mobile dropdown menu */}
@@ -139,6 +139,7 @@ const Header = () => {
           <MenuItem
             onClick={() => {
               document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              handleMenuClose();
             }}
             sx={{ color: '#FFFFFF' }}
           >
@@ -147,6 +148,7 @@ const Header = () => {
           <MenuItem
             onClick={() => {
               document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              handleMenuClose();
             }}
             sx={{ color: '#FFFFFF' }}
           >
@@ -155,6 +157,7 @@ const Header = () => {
           <MenuItem
             onClick={() => {
               document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              handleMenuClose();
             }}
             sx={{ color: '#FFFFFF' }}
           >
@@ -165,6 +168,7 @@ const Header = () => {
             href="https://github.com/Abillallib"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={handleMenuClose}
             sx={{ color: '#FFFFFF' }}
           >
             GitHub
