@@ -1,195 +1,76 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { Box, Typography, LinearProgress } from '@mui/material';
+import { Box, Typography, LinearProgress, Button, Alert } from '@mui/material';
 import { RocketLaunch as RocketIcon } from '@mui/icons-material';
 import Particles from 'react-particles';
 import { loadFull } from 'tsparticles';
 
-const VideoLoadingOverlay = ({ isVisible, onVideoReady, videoSrc }) => {
+const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
   const [progress, setProgress] = useState(0);
   const [loadingStage, setLoadingStage] = useState('Preparing experience...');
-  const videoRef = useRef(null);
-  const progressTimeoutRef = useRef(null);
-  const cleanupFunctionsRef = useRef([]);
+  const [isExiting, setIsExiting] = useState(false);
+  const [shouldRender, setShouldRender] = useState(isVisible);
 
-  // Smooth progress update that prevents backward jumping
-  const updateProgress = useCallback((newProgress) => {
-    setProgress(prev => {
-      // Never allow progress to decrease
-      const clampedProgress = Math.max(prev, Math.min(newProgress, 100));
-      return clampedProgress;
-    });
-  }, []);
-
-  // Debounced progress update to prevent rapid changes
-  const debouncedProgressUpdate = useCallback((targetProgress) => {
-    if (progressTimeoutRef.current) {
-      clearTimeout(progressTimeoutRef.current);
+  // Handle visibility changes with smooth transitions
+  useEffect(() => {
+    if (isVisible) {
+      setShouldRender(true);
+      setIsExiting(false);
+      setProgress(0);
+      setLoadingStage('Preparing experience...');
+    } else if (shouldRender) {
+      // Start exit animation
+      setIsExiting(true);
+      setProgress(100);
+      setLoadingStage('Complete!');
+      
+      // Remove from DOM after animation
+      const exitTimer = setTimeout(() => {
+        setShouldRender(false);
+        setIsExiting(false);
+      }, 800); // Match transition duration
+      
+      return () => clearTimeout(exitTimer);
     }
+  }, [isVisible, shouldRender]);
 
-    progressTimeoutRef.current = setTimeout(() => {
-      updateProgress(targetProgress);
-    }, 100); // 100ms debounce
+  // Simple progress simulation for smooth UX
+  useEffect(() => {
+    if (!isVisible || isExiting) return;
 
-    // Store cleanup function
-    cleanupFunctionsRef.current.push(() => {
-      if (progressTimeoutRef.current) {
-        clearTimeout(progressTimeoutRef.current);
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += Math.random() * 10 + 5; // Random increment between 5-15%
+      
+      if (currentProgress >= 90) {
+        currentProgress = 90; // Stop at 90%, let video completion handle 100%
+        clearInterval(interval);
       }
-    });
-  }, [updateProgress]);
+      
+      setProgress(Math.min(currentProgress, 90));
+    }, 300);
+
+    // Update loading stages
+    const stageTimeout1 = setTimeout(() => {
+      if (!isExiting) setLoadingStage('Loading content...');
+    }, 1000);
+    const stageTimeout2 = setTimeout(() => {
+      if (!isExiting) setLoadingStage('Almost ready...');
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(stageTimeout1);
+      clearTimeout(stageTimeout2);
+    };
+  }, [isVisible, isExiting]);
 
   const particlesInit = async (main) => {
     await loadFull(main);
   };
 
-  useEffect(() => {
-    if (!isVisible || !videoSrc) return;
 
-    let isVideoReady = false;
-    let maxProgressReached = 0;
-
-    // Create single video instance (prevents multiple videos)
-    if (!videoRef.current) {
-      videoRef.current = document.createElement('video');
-      videoRef.current.preload = 'auto';
-      videoRef.current.muted = true;
-    }
-
-    const video = videoRef.current;
-
-    // Phase 1: Connection
-    const handleLoadStart = () => {
-      setLoadingStage('Preparing experience...');
-      debouncedProgressUpdate(10);
-    };
-
-    // Phase 2: Metadata loaded
-    const handleMetadata = () => {
-      setLoadingStage('Loading content...');
-      debouncedProgressUpdate(30);
-    };
-
-    // Phase 3: Initial data
-    const handleDataLoaded = () => {
-      setLoadingStage('Almost ready...');
-      debouncedProgressUpdate(50);
-    };
-
-    // Phase 4: Can play
-    const handleCanPlay = () => {
-      setLoadingStage('Finalizing...');
-      debouncedProgressUpdate(80);
-    };
-
-    // Phase 5: Full loading - most important event
-    const handleCanPlayThrough = () => {
-      setLoadingStage('Complete!');
-      isVideoReady = true;
-      debouncedProgressUpdate(100);
-
-      // Wait a moment to show 100%, then check if video is truly ready
-      setTimeout(() => {
-        if (isVideoReady) {
-          onVideoReady();
-        }
-      }, 800);
-    };
-
-    // Phase 6: Real buffering progress (smoothed)
-    const handleProgress = () => {
-      try {
-        if (video.buffered.length > 0) {
-          const buffered = video.buffered.end(video.buffered.length - 1);
-          const duration = video.duration;
-
-          if (duration > 0 && !isNaN(duration)) {
-            const bufferedPercent = (buffered / duration) * 100;
-            // Smooth progress between 50-90% based on real buffering
-            const targetProgress = Math.min(90, Math.max(50, bufferedPercent));
-            
-            // Only update if this is higher than current progress
-            if (targetProgress > maxProgressReached) {
-              maxProgressReached = targetProgress;
-              debouncedProgressUpdate(targetProgress);
-            }
-          }
-        }
-      } catch (error) {
-        // Silently handle buffering calculation errors
-        console.debug('Buffering calculation error:', error);
-      }
-    };
-
-    // Error handling
-    const handleError = (error) => {
-      console.error('Video loading error:', error);
-      setLoadingStage('Retrying...');
-      // Don't reset progress on error, just show error state
-    };
-
-    // Safety timeout - maximum loading time
-    const safetyTimeout = setTimeout(() => {
-      if (!isVideoReady) {
-        console.log('Video loading timeout reached, forcing completion');
-        isVideoReady = true;
-        debouncedProgressUpdate(100);
-        setTimeout(() => {
-          if (isVideoReady) {
-            onVideoReady();
-          }
-        }, 500);
-      }
-    }, 15000); // 15 second max loading time
-
-    // Add event listeners
-    video.addEventListener('loadstart', handleLoadStart);
-    video.addEventListener('loadedmetadata', handleMetadata);
-    video.addEventListener('loadeddata', handleDataLoaded);
-    video.addEventListener('canplay', handleCanPlay);
-    video.addEventListener('canplaythrough', handleCanPlayThrough);
-    video.addEventListener('progress', handleProgress);
-    video.addEventListener('error', handleError);
-
-    // Set video source to start loading
-    video.src = videoSrc;
-
-    // Cleanup function
-    return () => {
-      clearTimeout(safetyTimeout);
-      
-      // Clean up all timeouts
-      cleanupFunctionsRef.current.forEach(cleanup => cleanup());
-      cleanupFunctionsRef.current = [];
-
-      // Remove event listeners
-      video.removeEventListener('loadstart', handleLoadStart);
-      video.removeEventListener('loadedmetadata', handleMetadata);
-      video.removeEventListener('loadeddata', handleDataLoaded);
-      video.removeEventListener('canplay', handleCanPlay);
-      video.removeEventListener('canplaythrough', handleCanPlayThrough);
-      video.removeEventListener('progress', handleProgress);
-      video.removeEventListener('error', handleError);
-
-      // Clean up video
-      if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.removeAttribute('src');
-        videoRef.current.load();
-      }
-    };
-  }, [isVisible, videoSrc, onVideoReady, debouncedProgressUpdate]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      cleanupFunctionsRef.current.forEach(cleanup => cleanup());
-      cleanupFunctionsRef.current = [];
-    };
-  }, []);
-
-
-  if (!isVisible) return null;
+  if (!shouldRender) return null;
 
   return (
     <Box
@@ -205,6 +86,8 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, videoSrc }) => {
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 9999,
+        opacity: isExiting ? 0 : 1,
+        transition: 'opacity 0.8s ease-out',
       }}
     >
       {/* Particle Background - Same as before */}
@@ -338,8 +221,40 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, videoSrc }) => {
             minHeight: '1.5rem'
           }}
         >
-          {loadingStage}
+          {error || loadingStage}
         </Typography>
+
+        {/* Error Alert with Retry Button */}
+        {error && onRetry && (
+          <Alert
+            severity="error"
+            sx={{
+              mb: 3,
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              color: '#ffffff',
+              '& .MuiAlert-icon': {
+                color: '#ff6b6b'
+              }
+            }}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={onRetry}
+                sx={{
+                  color: '#64ffda',
+                  '&:hover': {
+                    backgroundColor: 'rgba(100, 255, 218, 0.1)'
+                  }
+                }}
+              >
+                Retry
+              </Button>
+            }
+          >
+            {error}
+          </Alert>
+        )}
 
         {/* Progress Bar - Same Material-UI styling */}
         <Box sx={{ width: '100%', mb: 2 }}>

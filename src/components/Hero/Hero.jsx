@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -9,10 +9,10 @@ import {
   Divider
 } from '@mui/material';
 import VideoLoadingOverlay from '../VideoLoadingOverlay/VideoLoadingOverlay';
+import useVideoOptimization from '../../hooks/useVideoOptimization';
 
 const Hero = () => {
   const [activeTab, setActiveTab] = useState('analyst');
-  const [isVideoLoading, setIsVideoLoading] = useState(true);
 
   const handleTabChange = (_e, value) => setActiveTab(value);
 
@@ -21,23 +21,28 @@ const Hero = () => {
     engineer: 'I build intelligent tools and automation that scale insights and streamline workflows.',
   };
 
-  const handleVideoCanPlayThrough = () => {
-    console.log('Video can play through, hiding loading screen...');
-    setIsVideoLoading(false);
-  };
-
-  const handleVideoLoadStart = () => {
-    console.log('Video loading started...');
-    setIsVideoLoading(true);
-  };
+  // Initialize video optimization system
+  const baseVideoSrc = `${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`;
+  const {
+    videoRef,
+    videoQuality,
+    connectionSpeed,
+    isLoading,
+    loadError,
+    bufferHealth,
+    getVideoSrc,
+    retryLoad,
+    handleVideoReady
+  } = useVideoOptimization(baseVideoSrc);
 
   return (
     <>
       {/* Loading Overlay */}
       <VideoLoadingOverlay
-        isVisible={isVideoLoading}
-        onVideoReady={handleVideoCanPlayThrough}
-        videoSrc={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`}
+        isVisible={isLoading}
+        onVideoReady={handleVideoReady}
+        error={loadError}
+        onRetry={retryLoad}
       />
 
       <Box
@@ -56,7 +61,7 @@ const Hero = () => {
           mx: 'auto',
           zIndex: 2,
           pb: { xs: 8, md: 0 },
-          opacity: isVideoLoading ? 0 : 1,
+          opacity: isLoading ? 0 : 1,
           transition: 'opacity 0.5s ease-in-out'
         }}
       >
@@ -116,22 +121,21 @@ const Hero = () => {
           }}
         >
           <video
+            ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
-            preload="auto"
             controlsList="nodownload nofullscreen noremoteplayback"
             disablePictureInPicture
             onContextMenu={(e) => e.preventDefault()}
-            onError={(e) => console.error('Video error:', e)}
             onEnded={(e) => {
               console.log('Video ended, restarting...');
               e.target.currentTime = 0;
               e.target.play().catch(e => console.error('Error replaying video:', e));
             }}
           >
-            <source src={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`} type="video/webm" />
+            <source src={getVideoSrc(videoQuality)} type="video/webm" />
             <source src={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.mp4`} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
