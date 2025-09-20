@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Box,
   Typography,
@@ -9,7 +9,9 @@ import {
   Divider
 } from '@mui/material';
 import VideoLoadingOverlay from '../VideoLoadingOverlay/VideoLoadingOverlay';
-import useVideoOptimization from '../../hooks/useVideoOptimization';
+import useLoadingManager from '../../hooks/useLoadingManager';
+import { detectBrowser } from '../../utils/browserDetection';
+import { logVideoSelection } from '../../utils/videoTest';
 
 const Hero = () => {
   const [activeTab, setActiveTab] = useState('analyst');
@@ -21,40 +23,48 @@ const Hero = () => {
     engineer: 'I build intelligent tools and automation that scale insights and streamline workflows.',
   };
 
-  // Initialize video optimization system
-  const baseVideoSrc = `${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`;
+  // Browser detection for optimal video format - MEMOIZED to prevent re-renders
+  const browserInfo = useMemo(() => {
+    // console.log('🔍 BROWSER DETECTION: Running detection (should only see this once)');
+    return detectBrowser();
+  }, []); // Empty dependency array - only run once
+
+  // Log video selection once - MEMOIZED to prevent re-renders
+  useMemo(() => {
+    // console.log('📋 VIDEO SELECTION: Logging selection (should only see this once)');
+    logVideoSelection(browserInfo);
+  }, [browserInfo]); // Only re-run if browserInfo changes (which it won't)
+
+  // Select video source based on browser detection - MEMOIZED to prevent re-computation
+  const videoSrc = useMemo(() => {
+    const webmSrc = `${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`;
+    const mp4Src = `${import.meta.env.BASE_URL}images/projects/hero/hero-video-ios.mp4`;
+
+    // Use WEBM for Chrome/Android, MP4 for iOS/Safari, MP4 as fallback
+    const selectedSrc = browserInfo.videoFormat === 'mov' ? webmSrc : mp4Src;
+    // console.log('🎬 VIDEO SOURCE SELECTED:', selectedSrc);
+    return selectedSrc;
+  }, [browserInfo]); // Only re-compute if browserInfo changes
+
+  // Simplified loading system - single source of truth
   const {
     videoRef,
-    videoQuality,
-    connectionSpeed,
     isLoading,
-    loadError,
-    bufferHealth,
-    getVideoSrc,
-    retryLoad,
-    handleVideoReady
-  } = useVideoOptimization(baseVideoSrc);
-
-  // Track when loading is actually complete (including overlay animation)
-  const [showHero, setShowHero] = useState(false);
-
-  useEffect(() => {
-    if (!isLoading && !showHero) {
-      // Delay hero appearance to allow loading overlay to complete
-      setTimeout(() => {
-        setShowHero(true);
-      }, 1000); // Wait 1 second after loading is false
-    }
-  }, [isLoading, showHero]);
+    isVisible,
+    showHero,
+    progress,
+    error,
+    retry
+  } = useLoadingManager(videoSrc);
 
   return (
     <>
       {/* Loading Overlay */}
       <VideoLoadingOverlay
-        isVisible={isLoading}
-        onVideoReady={handleVideoReady}
-        error={loadError}
-        onRetry={retryLoad}
+        isVisible={isVisible}
+        progress={progress}
+        error={error}
+        onRetry={retry}
       />
 
       <Box
@@ -73,8 +83,8 @@ const Hero = () => {
           mx: 'auto',
           zIndex: 2,
           pb: { xs: 8, md: 0 },
-          opacity: showHero ? 1 : 0, // Control visibility based on completion state
-          transition: 'opacity 0.5s ease-in-out'
+          opacity: showHero ? 1 : 0, // Simple visibility control
+          transition: 'opacity 800ms ease-in-out' // Smooth fade-in
         }}
       >
       <Box sx={{ 
@@ -141,14 +151,26 @@ const Hero = () => {
             controlsList="nodownload nofullscreen noremoteplayback"
             disablePictureInPicture
             onContextMenu={(e) => e.preventDefault()}
-            onEnded={(e) => {
-              console.log('Video ended, restarting...');
-              e.target.currentTime = 0;
-              e.target.play().catch(e => console.error('Error replaying video:', e));
+            style={{
+              position: 'absolute',
+              top: '8px',
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '8px',
+              userSelect: 'none',
+              pointerEvents: 'none'
             }}
           >
-            <source src={getVideoSrc(videoQuality)} type="video/webm" />
-            <source src={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.mp4`} type="video/mp4" />
+            {/* Primary video source based on browser detection */}
+            <source
+              src={videoSrc}
+              type={browserInfo.videoFormat === 'mov' ? 'video/webm' : 'video/mp4'}
+            />
+            {/* Fallback sources for maximum compatibility */}
+            <source src={`${import.meta.env.BASE_URL}images/projects/hero/hero-video-ios.mp4`} type="video/mp4" />
+            <source src={`${import.meta.env.BASE_URL}images/projects/hero/hero-video.webm`} type="video/webm" />
             Your browser does not support the video tag.
           </video>
         </Box>
@@ -268,4 +290,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default React.memo(Hero);

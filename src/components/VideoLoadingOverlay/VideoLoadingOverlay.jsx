@@ -1,90 +1,29 @@
-import React, { useState, useEffect } from 'react';
-
+import React from 'react';
 import { Box, Typography, LinearProgress, Button, Alert } from '@mui/material';
 import { RocketLaunch as RocketIcon } from '@mui/icons-material';
 import Particles from 'react-particles';
 import { loadFull } from 'tsparticles';
 
-const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
-  const [progress, setProgress] = useState(0);
-  const [loadingStage, setLoadingStage] = useState('Preparing experience...');
-  const [shouldRender, setShouldRender] = useState(isVisible);
-  const [isCompleting, setIsCompleting] = useState(false);
-
-  // Handle visibility changes with proper completion sequence
-  useEffect(() => {
-    if (isVisible) {
-      setShouldRender(true);
-      setProgress(0);
-      setLoadingStage('Preparing experience...');
-      setIsCompleting(false);
-    } else if (shouldRender && !isCompleting) {
-      // Start completion sequence
-      setIsCompleting(true);
-      setLoadingStage('Finalizing...');
-      setProgress(100);
-
-      // Hide after completion animation
-      setTimeout(() => {
-        setShouldRender(false);
-        setIsCompleting(false);
-      }, 800);
-    }
-  }, [isVisible, shouldRender, isCompleting]);
-
-  // Progress simulation for smooth UX
-  useEffect(() => {
-    if (!isVisible || isCompleting) return;
-
-    let currentProgress = 0;
-    const interval = setInterval(() => {
-      currentProgress += Math.random() * 10 + 5; // Random increment between 5-15%
-
-      if (currentProgress >= 90) {
-        currentProgress = 90; // Stop at 90%, wait for video completion
-        clearInterval(interval);
-      }
-
-      setProgress(Math.min(currentProgress, 90));
-    }, 300);
-
-    // Update loading stages
-    const stageTimeout1 = setTimeout(() => {
-      if (isVisible && !isCompleting) setLoadingStage('Loading content...');
-    }, 1000);
-    const stageTimeout2 = setTimeout(() => {
-      if (isVisible && !isCompleting) setLoadingStage('Almost ready...');
-    }, 2000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(stageTimeout1);
-      clearTimeout(stageTimeout2);
-    };
-  }, [isVisible, isCompleting]);
-
-  // Handle video ready callback
-  useEffect(() => {
-    if (onVideoReady && isVisible && !isCompleting) {
-      // Video is ready, start completion sequence
-      setIsCompleting(true);
-      setLoadingStage('Finalizing...');
-      setProgress(100);
-
-      // Hide after completion animation
-      setTimeout(() => {
-        setShouldRender(false);
-        setIsCompleting(false);
-      }, 800);
-    }
-  }, [onVideoReady, isVisible, isCompleting]);
-
+const VideoLoadingOverlay = ({ isVisible, progress, error, onRetry }) => {
   const particlesInit = async (main) => {
     await loadFull(main);
   };
 
+  // Determine loading stage based on progress
+  const getLoadingStage = () => {
+    if (error) return error;
+    if (progress >= 100) return 'Complete!';
+    if (progress >= 85) return 'Almost ready...';
+    if (progress >= 50) return 'Loading content...';
+    return 'Preparing experience...';
+  };
 
-  if (!shouldRender) return null;
+  // console.log('🎨 VideoLoadingOverlay RENDERING - Progress:', progress, 'Is Visible:', isVisible);
+
+  if (!isVisible) {
+    // console.log('🚫 VideoLoadingOverlay HIDDEN');
+    return null;
+  }
 
   return (
     <Box
@@ -100,8 +39,8 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 9999,
-        opacity: isCompleting ? 0 : 1, // Fade out during completion
-        transition: 'opacity 0.8s ease-out',
+        opacity: progress >= 100 ? 0 : 1, // Fade out when complete
+        transition: 'opacity 800ms ease-out', // Smooth fade
       }}
     >
       {/* Particle Background - Same as before */}
@@ -235,7 +174,7 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
             minHeight: '1.5rem'
           }}
         >
-          {error || loadingStage}
+          {error || getLoadingStage()}
         </Typography>
 
         {/* Error Alert with Retry Button */}
@@ -297,10 +236,11 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
         >
           {Math.round(progress)}%
         </Typography>
+        {/* console.log('📊 PERCENTAGE DISPLAY:', Math.round(progress) + '%') */}
       </Box>
 
-      {/* Same CSS animation */}
-      <style jsx>{`
+      {/* CSS Animation using standard React approach */}
+      <style>{`
         @keyframes rocketFloat {
           0%, 100% {
             transform: translateY(0px);

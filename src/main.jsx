@@ -6,7 +6,9 @@ import { ThemeProvider, CssBaseline, GlobalStyles } from '@mui/material'
 import theme from './theme.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // Temporarily removed StrictMode to allow smooth loading animations
+  // StrictMode causes double-mounting which interrupts progress animations
+  // <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <GlobalStyles styles={{
@@ -29,5 +31,5 @@ createRoot(document.getElementById('root')).render(
       }} />
       <App />
     </ThemeProvider>
-  </StrictMode>,
+  // </StrictMode>
 )
