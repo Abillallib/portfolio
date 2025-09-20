@@ -174,7 +174,16 @@ const About = () => {
               <CardContent>
                 <Grid container spacing={2}>
                   {skills[activeCategory].map((s) => (
-                    <Grid item xs={12} sm={6} key={`${activeCategory}-${s.name}`} sx={{ display: 'flex' }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      key={`${activeCategory}-${s.name}`}
+                      sx={{
+                        display: 'flex',
+                        alignItems: { xs: 'stretch', sm: 'flex-start' } // Stretch only on mobile
+                      }}
+                    >
                       <SkillCard
                         iconUrl={iconUrlFor(s.iconUrl)}
                         title={s.name}

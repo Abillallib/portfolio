@@ -16,8 +16,9 @@ const SkillCard = ({ iconUrl, title, subtitle }) => {
         alignItems: 'center',
         justifyContent: 'flex-start', // Align content to start but stretch full width
         width: '100%',
-        height: '100%', // Take full height of grid item
-        minHeight: { xs: '80px', sm: '90px' }, // Ensure consistent minimum height
+        height: { xs: 'auto', sm: '100%' }, // Auto height on mobile, full height on desktop
+        flex: { xs: 1, sm: 'none' }, // Flex stretch only on mobile
+        minHeight: { xs: '80px', sm: 'auto' }, // Minimum height only on mobile
         borderRadius: 3,
         bgcolor: 'rgba(255,255,255,0.06)',
         backdropFilter: 'blur(6px)',
