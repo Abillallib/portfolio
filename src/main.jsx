@@ -20,8 +20,10 @@ createRoot(document.getElementById('root')).render(
             'radial-gradient(circle at 50% 95%, rgba(35,35,70,0.5) 0%, rgba(10,25,41,0.0) 60%)',
             '#0A1929'
           ].join(', '),
-          backgroundAttachment: 'fixed',
+          // backgroundAttachment: 'fixed', // Removed - causes issues on mobile
           backgroundRepeat: 'no-repeat',
+          backgroundSize: '100% 100%', // Ensure background covers full viewport
+          minHeight: '100vh', // Ensure body covers full viewport height
           scrollbarWidth: 'none',        /* Firefox */
           msOverflowStyle: 'none',       /* IE/Edge */
           // Removed fixed height constraints to prevent mobile layout shifts
