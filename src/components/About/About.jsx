@@ -113,7 +113,7 @@ const About = () => {
            This passion for building and problem-solving is deeply personal. Whether it's engineering an automated data pipeline to analyze the Jamaican stock market or developing an AI model to generate an authentic Jamaican voice, I'm constantly driven by a curiosity to see how technology can solve unique challenges, especially for our region.
           </Typography>
           <Typography paragraph>
-            When I am not analyzing data, I explore new technologies and refine my craft.If you're looking for a creative problem-solver with a passion for building data-driven solutions, I'd love to connect.
+            When I am not analyzing data, I explore new technologies and refine my craft. If you're looking for a creative problem-solver with a passion for building data-driven solutions, I'd love to connect.
           </Typography>
         </Grid>
 

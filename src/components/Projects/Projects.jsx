@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Typography, Box, Tabs, Tab, Grid, Fade } from '@mui/material';
+import { Container, Typography, Box, Tabs, Tab, Grid, Fade, Button } from '@mui/material';
 import AnimatedTitle from '../AnimatedTitle/AnimatedTitle';
 import { projectsData } from '../../data/projectsData';
 import ProjectCard from '../ProjectCard/ProjectCard';
 import ProjectModal from '../ProjectModal/ProjectModal';
 import ProjectDetail from '../ProjectDetail/ProjectDetail';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 const Projects = () => {
   const [activeTab, setActiveTab] = useState('dataAnalysis');
@@ -174,6 +175,36 @@ const Projects = () => {
             ))}
           </Box>
         </Fade>
+
+        {/* More on GitHub Button */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6, mb: 2 }}>
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<GitHubIcon />}
+            component="a"
+            href="https://github.com/Abillallib"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              backgroundColor: 'primary.main',
+              color: '#0A1929',
+              fontSize: '1.1rem',
+              px: 4,
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                backgroundColor: 'primary.dark',
+                transform: 'translateY(-2px)'
+              },
+              transition: 'all 0.3s ease'
+            }}
+          >
+            VIEW MORE ON GITHUB
+          </Button>
+        </Box>
 
         {/* Project Modal */}
         <ProjectModal

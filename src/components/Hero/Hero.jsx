@@ -218,8 +218,8 @@ const Hero = () => {
           width: '90%',
           mx: 'auto',
           borderColor: 'rgba(255, 255, 255, 0.1)',
-          mt: { xs: 4, md: 'auto' },
-          mb: 0
+          mt: { xs: 6, md: 8 },
+          mb: { xs: 4, md: 6 }
         }}
       />
     </Box>
