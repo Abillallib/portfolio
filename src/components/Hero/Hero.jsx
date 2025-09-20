@@ -35,6 +35,18 @@ const Hero = () => {
     handleVideoReady
   } = useVideoOptimization(baseVideoSrc);
 
+  // Track when loading is actually complete (including overlay animation)
+  const [showHero, setShowHero] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && !showHero) {
+      // Delay hero appearance to allow loading overlay to complete
+      setTimeout(() => {
+        setShowHero(true);
+      }, 1000); // Wait 1 second after loading is false
+    }
+  }, [isLoading, showHero]);
+
   return (
     <>
       {/* Loading Overlay */}
@@ -61,7 +73,7 @@ const Hero = () => {
           mx: 'auto',
           zIndex: 2,
           pb: { xs: 8, md: 0 },
-          opacity: isLoading ? 0 : 1,
+          opacity: showHero ? 1 : 0, // Control visibility based on completion state
           transition: 'opacity 0.5s ease-in-out'
         }}
       >

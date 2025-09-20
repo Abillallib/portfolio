@@ -9,41 +9,51 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
   const [progress, setProgress] = useState(0);
   const [loadingStage, setLoadingStage] = useState('Preparing experience...');
   const [shouldRender, setShouldRender] = useState(isVisible);
+  const [isCompleting, setIsCompleting] = useState(false);
 
-  // Handle visibility changes with immediate removal (no fade-out)
+  // Handle visibility changes with proper completion sequence
   useEffect(() => {
     if (isVisible) {
       setShouldRender(true);
       setProgress(0);
       setLoadingStage('Preparing experience...');
-    } else if (shouldRender) {
-      // Immediate removal - no exit animation
-      setShouldRender(false);
-    }
-  }, [isVisible, shouldRender]);
+      setIsCompleting(false);
+    } else if (shouldRender && !isCompleting) {
+      // Start completion sequence
+      setIsCompleting(true);
+      setLoadingStage('Finalizing...');
+      setProgress(100);
 
-  // Simple progress simulation for smooth UX
+      // Hide after completion animation
+      setTimeout(() => {
+        setShouldRender(false);
+        setIsCompleting(false);
+      }, 800);
+    }
+  }, [isVisible, shouldRender, isCompleting]);
+
+  // Progress simulation for smooth UX
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || isCompleting) return;
 
     let currentProgress = 0;
     const interval = setInterval(() => {
       currentProgress += Math.random() * 10 + 5; // Random increment between 5-15%
-      
+
       if (currentProgress >= 90) {
-        currentProgress = 90; // Stop at 90%, let video completion handle 100%
+        currentProgress = 90; // Stop at 90%, wait for video completion
         clearInterval(interval);
       }
-      
+
       setProgress(Math.min(currentProgress, 90));
     }, 300);
 
     // Update loading stages
     const stageTimeout1 = setTimeout(() => {
-      if (isVisible) setLoadingStage('Loading content...');
+      if (isVisible && !isCompleting) setLoadingStage('Loading content...');
     }, 1000);
     const stageTimeout2 = setTimeout(() => {
-      if (isVisible) setLoadingStage('Almost ready...');
+      if (isVisible && !isCompleting) setLoadingStage('Almost ready...');
     }, 2000);
 
     return () => {
@@ -51,7 +61,23 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
       clearTimeout(stageTimeout1);
       clearTimeout(stageTimeout2);
     };
-  }, [isVisible]);
+  }, [isVisible, isCompleting]);
+
+  // Handle video ready callback
+  useEffect(() => {
+    if (onVideoReady && isVisible && !isCompleting) {
+      // Video is ready, start completion sequence
+      setIsCompleting(true);
+      setLoadingStage('Finalizing...');
+      setProgress(100);
+
+      // Hide after completion animation
+      setTimeout(() => {
+        setShouldRender(false);
+        setIsCompleting(false);
+      }, 800);
+    }
+  }, [onVideoReady, isVisible, isCompleting]);
 
   const particlesInit = async (main) => {
     await loadFull(main);
@@ -74,8 +100,8 @@ const VideoLoadingOverlay = ({ isVisible, onVideoReady, error, onRetry }) => {
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 9999,
-        opacity: 1, // Always fully visible when rendered
-        transition: 'none', // Remove transition to prevent mobile shifting
+        opacity: isCompleting ? 0 : 1, // Fade out during completion
+        transition: 'opacity 0.8s ease-out',
       }}
     >
       {/* Particle Background - Same as before */}
