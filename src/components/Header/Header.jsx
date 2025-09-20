@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
-import { Link } from 'react-scroll';
 import MenuIcon from '@mui/icons-material/Menu';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { styled } from '@mui/material/styles';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -56,34 +54,25 @@ const Header = () => {
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
           <Button
             sx={{ color: '#FFFFFF', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
-            component={Link}
-            to="projects"
-            smooth={true}
-            duration={500}
-            spy={true}
-            offset={-64}
+            onClick={() => {
+              document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
           >
             Projects
           </Button>
           <Button
             sx={{ color: '#FFFFFF', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
-            component={Link}
-            to="about"
-            smooth={true}
-            duration={500}
-            spy={true}
-            offset={-64}
+            onClick={() => {
+              document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
           >
             About
           </Button>
           <Button
             sx={{ color: '#FFFFFF', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
-            component={Link}
-            to="contact"
-            smooth={true}
-            duration={500}
-            spy={true}
-            offset={-64}
+            onClick={() => {
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
           >
             Contact
           </Button>
@@ -148,37 +137,25 @@ const Header = () => {
           }}
         >
           <MenuItem
-            component={Link}
-            to="projects"
-            smooth={true}
-            duration={500}
-            spy={true}
-            offset={-64}
-            onClick={handleMenuClose}
+            onClick={() => {
+              document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
             sx={{ color: '#FFFFFF' }}
           >
             Projects
           </MenuItem>
           <MenuItem
-            component={Link}
-            to="about"
-            smooth={true}
-            duration={500}
-            spy={true}
-            offset={-64}
-            onClick={handleMenuClose}
+            onClick={() => {
+              document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
             sx={{ color: '#FFFFFF' }}
           >
             About
           </MenuItem>
           <MenuItem
-            component={Link}
-            to="contact"
-            smooth={true}
-            duration={500}
-            spy={true}
-            offset={-64}
-            onClick={handleMenuClose}
+            onClick={() => {
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
             sx={{ color: '#FFFFFF' }}
           >
             Contact
@@ -188,7 +165,6 @@ const Header = () => {
             href="https://github.com/Abillallib"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={handleMenuClose}
             sx={{ color: '#FFFFFF' }}
           >
             GitHub
