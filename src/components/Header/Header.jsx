@@ -107,6 +107,12 @@ const Header = () => {
             ml: 1,
             '&:hover': {
               backgroundColor: 'rgba(255, 255, 255, 0.1)'
+            },
+            '&:focus': {
+              outline: 'none'
+            },
+            '&.Mui-focusVisible': {
+              outline: 'none'
             }
           }}
         >
@@ -126,6 +132,7 @@ const Header = () => {
               backdropFilter: 'blur(8px)',
               minWidth: '200px',
               border: '1px solid rgba(255, 255, 255, 0.1)',
+              mt: 1,
               '& .MuiMenuItem-root': {
                 color: '#FFFFFF',
                 padding: '12px 24px',
