@@ -14,7 +14,10 @@ const SkillCard = ({ iconUrl, title, subtitle }) => {
       sx={{
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'flex-start', // Align content to start but stretch full width
         width: '100%',
+        height: '100%', // Take full height of grid item
+        minHeight: { xs: '80px', sm: '90px' }, // Ensure consistent minimum height
         borderRadius: 3,
         bgcolor: 'rgba(255,255,255,0.06)',
         backdropFilter: 'blur(6px)',
@@ -44,20 +47,40 @@ const SkillCard = ({ iconUrl, title, subtitle }) => {
         onError={handleImageError}
         sx={{
           bgcolor: imageError ? 'primary.main' : '#fff',
-          width: 60,
-          height: 60,
+          width: { xs: 50, sm: 60 }, // Slightly smaller on mobile for better fit
+          height: { xs: 50, sm: 60 },
           mr: 2.25,
           borderRadius: 2,
           color: imageError ? '#fff' : 'inherit',
+          flexShrink: 0, // Prevent avatar from shrinking
         }}
       >
         {imageError && <CodeIcon />}
       </Avatar>
-      <Stack spacing={0.25} sx={{ minWidth: 0 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }} noWrap>
+      <Stack spacing={0.25} sx={{ 
+        minWidth: 0, 
+        flex: 1, // Take remaining space
+        justifyContent: 'center' // Center text vertically
+      }}>
+        <Typography 
+          variant="subtitle1" 
+          sx={{ 
+            fontWeight: 700, 
+            lineHeight: 1.2,
+            fontSize: { xs: '0.95rem', sm: '1rem' } // Slightly smaller on mobile
+          }} 
+          noWrap
+        >
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary" noWrap>
+        <Typography 
+          variant="body2" 
+          color="text.secondary" 
+          sx={{
+            fontSize: { xs: '0.8rem', sm: '0.875rem' } // Slightly smaller on mobile
+          }}
+          noWrap
+        >
           {subtitle}
         </Typography>
       </Stack>
