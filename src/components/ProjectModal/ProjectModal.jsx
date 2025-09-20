@@ -159,8 +159,18 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
 
         <Divider sx={{ my: 3, borderColor: 'rgba(255, 255, 255, 0.1)' }} />
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Stack direction="row" spacing={2}>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: { xs: 'center', md: 'space-between' },
+          alignItems: { xs: 'center', md: 'center' },
+          gap: { xs: 2, md: 0 }
+        }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={{ xs: 2, md: 2 }}
+            sx={{ width: { xs: '100%', md: 'auto' } }}
+          >
             {project.demoUrl ? (
               <Button
                 variant="contained"
@@ -170,7 +180,8 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
                   backgroundColor: 'primary.main',
                   color: '#0A1929',
                   fontWeight: 600,
-                  '&:hover': { 
+                  minWidth: { xs: '200px', md: 'auto' },
+                  '&:hover': {
                     backgroundColor: 'primary.dark',
                     transform: 'translateY(-2px)'
                   }
@@ -187,6 +198,7 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
                   color: 'rgba(255, 255, 255, 0.5)',
                   borderColor: 'rgba(255, 255, 255, 0.2)',
                   cursor: 'not-allowed',
+                  minWidth: { xs: '200px', md: 'auto' },
                   '&.Mui-disabled': {
                     color: 'rgba(255, 255, 255, 0.5)',
                     borderColor: 'rgba(255, 255, 255, 0.2)',
@@ -196,7 +208,7 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
                 No Demo Available
               </Button>
             )}
-            
+
             {project.githubUrl ? (
               <Button
                 variant="outlined"
@@ -205,6 +217,7 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
                 sx={{
                   color: '#FFFFFF',
                   borderColor: 'rgba(255, 255, 255, 0.3)',
+                  minWidth: { xs: '200px', md: 'auto' },
                   '&:hover': {
                     borderColor: 'primary.main',
                     backgroundColor: 'rgba(100, 255, 218, 0.1)',
@@ -223,6 +236,7 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
                   color: 'rgba(255, 255, 255, 0.5)',
                   borderColor: 'rgba(255, 255, 255, 0.2)',
                   cursor: 'not-allowed',
+                  minWidth: { xs: '200px', md: 'auto' },
                   '&.Mui-disabled': {
                     color: 'rgba(255, 255, 255, 0.5)',
                     borderColor: 'rgba(255, 255, 255, 0.2)',
@@ -242,6 +256,8 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
               backgroundColor: 'primary.main',
               color: '#0A1929',
               fontWeight: 600,
+              mt: { xs: 2, md: 0 },
+              minWidth: { xs: '200px', md: 'auto' },
               '&:hover': {
                 backgroundColor: 'primary.dark',
                 transform: 'translateY(-2px)'
