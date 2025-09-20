@@ -222,38 +222,18 @@ const Hero = () => {
           </Tabs>
 
           <Fade in key={activeTab} timeout={400}>
-            <Slide
-              in={true}
-              key={activeTab}
-              direction="up"
-              timeout={400}
-              mountOnEnter
-              unmountOnExit
-              container={null}
+            <Typography
+              variant="h5"
+              component="p"
               sx={{
-                transform: 'translateY(16px)',
-                transition: 'transform 400ms ease-in-out',
-                '&.MuiSlide-entered': {
-                  transform: 'translateY(0)',
-                },
-                '&.MuiSlide-exiting': {
-                  transform: 'translateY(16px)',
-                }
+                color: 'text.secondary',
+                fontSize: { xs: '1rem', sm: '1.1rem' },
+                lineHeight: 1.6,
+                mt: 2
               }}
             >
-              <Typography
-                variant="h5"
-                component="p"
-                sx={{
-                  color: 'text.secondary',
-                  fontSize: { xs: '1rem', sm: '1.1rem' },
-                  lineHeight: 1.6,
-                  mt: 2
-                }}
-              >
-                {contentMap[activeTab]}
-              </Typography>
-            </Slide>
+              {contentMap[activeTab]}
+            </Typography>
           </Fade>
         </Box>
       </Box>
