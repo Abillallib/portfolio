@@ -181,7 +181,7 @@ const About = () => {
                       key={`${activeCategory}-${s.name}`}
                       sx={{
                         display: 'flex',
-                        alignItems: { xs: 'stretch', sm: 'flex-start' } // Stretch only on mobile
+                        // Removed alignItems to let cards control their own height
                       }}
                     >
                       <SkillCard

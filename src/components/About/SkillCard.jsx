@@ -17,15 +17,15 @@ const SkillCard = ({ iconUrl, title, subtitle }) => {
         justifyContent: 'flex-start', // Align content to start but stretch full width
         width: '100%',
         height: { xs: '90px', sm: '100%' }, // Fixed height on mobile, full height on desktop
-        flex: { xs: 1, sm: 'none' }, // Flex stretch only on mobile
+        flex: { xs: 'none', sm: 'none' }, // Don't use flex on mobile to avoid stretching issues
         minHeight: { xs: '90px', sm: 'auto' }, // Consistent height on mobile only
         borderRadius: 3,
         bgcolor: 'rgba(255,255,255,0.06)',
         backdropFilter: 'blur(6px)',
         border: '1px solid',
         borderColor: 'rgba(255,255,255,0.12)',
-        px: 2.25,
-        py: 1.75,
+        px: { xs: 2, sm: 2.25 }, // Slightly less padding on mobile for better fit
+        py: 1.75, // Consistent vertical padding
         transition: 'transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease',
         boxShadow: 'none',
         cursor: 'default',
@@ -50,7 +50,7 @@ const SkillCard = ({ iconUrl, title, subtitle }) => {
           bgcolor: imageError ? 'primary.main' : '#fff',
           width: { xs: 50, sm: 60 }, // Slightly smaller on mobile for better fit
           height: { xs: 50, sm: 60 },
-          mr: 2.25,
+          mr: { xs: 1.75, sm: 2.25 }, // Match padding for consistent spacing
           borderRadius: 2,
           color: imageError ? '#fff' : 'inherit',
           flexShrink: 0, // Prevent avatar from shrinking
@@ -58,10 +58,12 @@ const SkillCard = ({ iconUrl, title, subtitle }) => {
       >
         {imageError && <CodeIcon />}
       </Avatar>
-      <Stack spacing={0.25} sx={{ 
-        minWidth: 0, 
+      <Stack spacing={0.25} sx={{
+        minWidth: 0,
         flex: 1, // Take remaining space
-        justifyContent: 'center' // Center text vertically
+        justifyContent: 'center', // Center text vertically
+        height: '100%', // Ensure Stack takes full card height
+        alignItems: 'flex-start' // Align text to start horizontally
       }}>
         <Typography 
           variant="subtitle1" 
