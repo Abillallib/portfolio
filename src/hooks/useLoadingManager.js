@@ -24,6 +24,7 @@ const useLoadingManager = (videoSrc) => {
   const setProgressRef = useRef(null);
   const maxProgressRef = useRef(0); // Track highest progress to prevent going backwards
   const currentStageRef = useRef('initial'); // Track current loading stage
+  const heroReadyDispatchedRef = useRef(false);
 
   // Keep setProgress ref updated
   useEffect(() => {
@@ -327,6 +328,17 @@ const useLoadingManager = (videoSrc) => {
   const isVisible = phase !== 'hidden';
   const showHero = phase === 'complete' || phase === 'hidden';
   const isCompleting = phase === 'completing';
+
+  useEffect(() => {
+    if (phase === 'hidden' && !heroReadyDispatchedRef.current) {
+      heroReadyDispatchedRef.current = true;
+
+      if (typeof window !== 'undefined') {
+        window.__heroReady = true;
+        window.dispatchEvent(new Event('hero:ready'));
+      }
+    }
+  }, [phase]);
 
   return {
     videoRef,

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Container, Typography, Grid, Box, Card, CardHeader, CardContent, Avatar, Tabs, Tab, Stack } from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import { Container, Typography, Grid, Box, Card, CardContent, Tabs, Tab, Stack } from '@mui/material';
 import AnimatedTitle from '../AnimatedTitle/AnimatedTitle';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import CodeIcon from '@mui/icons-material/Code';
@@ -12,6 +12,8 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ScienceIcon from '@mui/icons-material/Science';
 import SkillCard from './SkillCard';
+import usePreloadImages from '../../hooks/usePreloadImages';
+import useHeroReady from '../../hooks/useHeroReady';
 
 // Technical skills categorized into groups
 const skills = {
@@ -42,8 +44,9 @@ const skills = {
 };
 
 const About = () => {
-  const categories = Object.keys(skills);
+  const categories = useMemo(() => Object.keys(skills), []);
   const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const heroReady = useHeroReady();
 
   // Map specific skills to representative MUI icons (approximations where exact brand icons don't exist)
   const skillIconMap = {
@@ -81,6 +84,23 @@ const About = () => {
   };
 
   const iconUrlFor = (slugOrUrl) => slugOrUrl;
+
+  const skillGroups = useMemo(
+    () =>
+      categories.map((category) => ({
+        category,
+        skills: skills[category],
+        iconUrls: skills[category].map((skill) => iconUrlFor(skill.iconUrl)),
+      })),
+    [categories]
+  );
+
+  const skillIconUrls = useMemo(
+    () => skillGroups.flatMap(({ iconUrls }) => iconUrls),
+    [skillGroups]
+  );
+
+  usePreloadImages(skillIconUrls, { delay: 300, enabled: heroReady });
 
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
@@ -171,27 +191,42 @@ const About = () => {
                 borderColor: 'rgba(255,255,255,0.12)'
               }}
             >
-              <CardContent>
-                <Grid container spacing={2}>
-                  {skills[activeCategory].map((s) => (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      key={`${activeCategory}-${s.name}`}
+              <CardContent sx={{ position: 'relative', minHeight: 0 }}>
+                <Box sx={{ position: 'relative', minHeight: 0 }}>
+                  {skillGroups.map(({ category, skills: categorySkills }) => (
+                    <Box
+                      key={category}
                       sx={{
-                        display: 'flex',
-                        // Removed alignItems to let cards control their own height
+                        position: activeCategory === category ? 'relative' : 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        opacity: activeCategory === category ? 1 : 0,
+                        visibility: activeCategory === category ? 'visible' : 'hidden',
+                        pointerEvents: activeCategory === category ? 'auto' : 'none',
+                        transition: 'opacity 0.4s ease, visibility 0.4s ease',
                       }}
                     >
-                      <SkillCard
-                        iconUrl={iconUrlFor(s.iconUrl)}
-                        title={s.name}
-                        subtitle={s.subtitle}
-                      />
-                    </Grid>
+                      <Grid container spacing={2}>
+                        {categorySkills.map((skill) => (
+                          <Grid
+                            key={`${category}-${skill.name}`}
+                            item
+                            xs={12}
+                            sm={6}
+                            sx={{ display: 'flex' }}
+                          >
+                            <SkillCard
+                              iconUrl={iconUrlFor(skill.iconUrl)}
+                              title={skill.name}
+                              subtitle={skill.subtitle}
+                            />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Box>
                   ))}
-                </Grid>
+                </Box>
               </CardContent>
             </Card>
           </Stack>
