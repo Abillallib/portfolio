@@ -12,7 +12,8 @@ function App() {
   return (
     <Box sx={{
       minHeight: '100vh',
-      background: 'radial-gradient(ellipse 120% 150% at center top, rgba(123, 31, 162, 0.15) 0%, rgba(74, 20, 140, 0.2) 40%, transparent 80%)',
+      backgroundColor: '#060e17',
+      background: 'linear-gradient(180deg, rgba(6, 14, 23, 0.95) 0%, rgba(6, 14, 23, 0.9) 40%, rgba(6, 14, 23, 0.85) 100%)',
       position: 'relative',
       zIndex: 0,
     }}>

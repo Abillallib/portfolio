@@ -15,10 +15,7 @@ createRoot(document.getElementById('root')).render(
         body: {
           /* layered radial highlights along the vertical to keep a subtle glow throughout */
           background: [
-            'radial-gradient(circle at 50% 15%, rgba(35,35,70,0.85) 0%, rgba(10,25,41,0.0) 55%)',
-            'radial-gradient(circle at 50% 55%, rgba(35,35,70,0.6) 0%, rgba(10,25,41,0.0) 60%)',
-            'radial-gradient(circle at 50% 95%, rgba(35,35,70,0.5) 0%, rgba(10,25,41,0.0) 60%)',
-            '#0A1929'
+            'linear-gradient(180deg, rgba(6, 14, 23, 0.95) 0%, rgba(6, 14, 23, 0.9) 40%, rgba(6, 14, 23, 0.85) 100%)'
           ].join(', '),
           // backgroundAttachment: 'fixed', // Removed - causes issues on mobile
           backgroundRepeat: 'no-repeat',
@@ -28,12 +25,9 @@ createRoot(document.getElementById('root')).render(
           msOverflowStyle: 'none',       /* IE/Edge */
           // Mobile-specific background color to prevent purple footer
           '@media (max-width: 600px)': {
-            backgroundColor: '#060e17', // Dark navy blue for mobile
+            backgroundColor: '#060e17',
             background: [
-              'radial-gradient(circle at 50% 15%, rgba(35,35,70,0.85) 0%, rgba(10,25,41,0.0) 55%)',
-              'radial-gradient(circle at 50% 55%, rgba(35,35,70,0.6) 0%, rgba(10,25,41,0.0) 60%)',
-              'radial-gradient(circle at 50% 95%, rgba(35,35,70,0.5) 0%, rgba(10,25,41,0.0) 60%)',
-              '#060e17'
+              'linear-gradient(180deg, rgba(6, 14, 23, 0.95) 0%, rgba(6, 14, 23, 0.9) 40%, rgba(6, 14, 23, 0.85) 100%)'
             ].join(', '),
           },
           // Removed fixed height constraints to prevent mobile layout shifts
