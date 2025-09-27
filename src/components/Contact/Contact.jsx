@@ -42,19 +42,34 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+
+    const formPayload = new URLSearchParams({
+      'entry.1072725161': formData.name,
+      'entry.456413530': formData.email,
+      'entry.1962133590': formData.subject,
+      'entry.668778904': formData.message,
+    });
+
     setIsSubmitting(true);
+
     try {
-      const response = await fetch('/.netlify/functions/send-email', {
+      await fetch('https://docs.google.com/forms/d/e/1FAIpQLSe1JZdGpQ81vNSvt3xUDMCtwVO2yVis2M3-kaeQPZIeR362gQ/formResponse', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formPayload.toString(),
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to send message');
+
       setSnackbar({ open: true, message: 'Message sent successfully!', severity: 'success' });
       setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (err) {
-      setSnackbar({ open: true, message: err.message || 'Something went wrong.', severity: 'error' });
+      setSnackbar({
+        open: true,
+        message: err?.message || 'Something went wrong.',
+        severity: 'error',
+      });
     } finally {
       setIsSubmitting(false);
     }
