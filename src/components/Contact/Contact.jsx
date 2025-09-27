@@ -43,6 +43,16 @@ const Contact = () => {
     e.preventDefault();
     if (!validate()) return;
 
+    const honeypotValue = e.currentTarget['website']?.value;
+    if (honeypotValue) {
+      setSnackbar({
+        open: true,
+        message: 'Submission detected as spam and was not sent.',
+        severity: 'error',
+      });
+      return;
+    }
+
     const formPayload = new URLSearchParams({
       'entry.1072725161': formData.name,
       'entry.456413530': formData.email,
@@ -129,6 +139,7 @@ const Contact = () => {
           <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
             <Box component="form" onSubmit={handleSubmit} noValidate>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <input type="text" name="website" tabIndex="-1" autoComplete="off" style={{ display: 'none' }} />
                 {/* Name Field */}
                 <TextField
                   fullWidth
