@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { Container, Typography, Grid, Box, Card, CardContent, Tabs, Tab, Stack } from '@mui/material';
+import { Container, Typography, Box, Card, CardContent, Tabs, Tab, Stack } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import AnimatedTitle from '../AnimatedTitle/AnimatedTitle';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import CodeIcon from '@mui/icons-material/Code';
@@ -121,7 +122,7 @@ const About = () => {
 
       <Grid container spacing={3}>
         {/* Bio column */}
-        <Grid item xs={12} md={7}>
+        <Grid xs={12} md={7}>
           <Typography variant="body1" component="h3" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
             I believe the most powerful stories are told with data. My mission is to find those stories and build the intelligent tools that bring them to life.
           </Typography>
@@ -138,7 +139,7 @@ const About = () => {
         </Grid>
 
         {/* Skills column */}
-        <Grid item xs={12} md={5}>
+        <Grid xs={12} md={5}>
           <Stack spacing={2}>
             <Tabs
               value={activeCategory}
@@ -208,22 +209,21 @@ const About = () => {
                       }}
                     >
                       <Grid container spacing={2}>
-                        {categorySkills.map((skill) => (
-                          <Grid
-                            key={`${category}-${skill.name}`}
-                            item
-                            xs={12}
-                            sm={6}
-                            sx={{ display: 'flex' }}
-                          >
-                            <SkillCard
-                              iconUrl={iconUrlFor(skill.iconUrl)}
-                              title={skill.name}
-                              subtitle={skill.subtitle}
-                            />
-                          </Grid>
-                        ))}
+                    {categorySkills.map((skill) => (
+                      <Grid
+                        key={`${category}-${skill.name}`}
+                        xs={12}
+                        sm={6}
+                        sx={{ display: 'flex' }}
+                      >
+                        <SkillCard
+                          iconUrl={iconUrlFor(skill.iconUrl)}
+                          title={skill.name}
+                          subtitle={skill.subtitle}
+                        />
                       </Grid>
+                    ))}
+                  </Grid>
                     </Box>
                   ))}
                 </Box>
