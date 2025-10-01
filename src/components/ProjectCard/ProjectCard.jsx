@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Card, 
   CardMedia, 
@@ -23,6 +23,8 @@ const ProjectCard = ({ project = {}, onPreview, onViewDetails }) => {
     image = '',
     githubUrl = '#'
   } = project;
+
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <Card
@@ -94,6 +96,7 @@ const ProjectCard = ({ project = {}, onPreview, onViewDetails }) => {
           alt={title}
           onContextMenu={(e) => e.preventDefault()}
           onDragStart={(e) => e.preventDefault()}
+          onLoad={() => setImageLoaded(true)}
           sx={{
             position: 'absolute',
             top: 0,
@@ -101,7 +104,8 @@ const ProjectCard = ({ project = {}, onPreview, onViewDetails }) => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            transition: 'transform 0.5s ease',
+            opacity: imageLoaded ? 1 : 0,
+            transition: 'opacity 0.3s ease, transform 0.5s ease',
             userSelect: 'none',
             WebkitUserSelect: 'none',
             MozUserSelect: 'none',

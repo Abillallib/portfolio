@@ -126,7 +126,7 @@ export const projectsData = {
       metrics: {
         'Core AI Features': '3',
         'Interactive Prototype': '1',
-        'Target Region': '1 Focused'
+        'Target Region': '1'
       },
       fullDescription: 'Cyberattacks are a growing threat to Caribbean businesses, costing millions and eroding customer trust. Inspired by this regional challenge, this AI graduate class project explores the concept of PentelligentAI—an automated, intelligent penetration testing tool designed to be accessible and affordable for these businesses. The goal was to envision a platform that could level the playing field in cybersecurity for the local market.',
       challenges: 'The main challenge was to distill the complex, data-heavy domain of cybersecurity into a clean and actionable user interface. The prototype, built in React, was designed to demonstrate a user-friendly workflow powered by a sophisticated AI backend.',
