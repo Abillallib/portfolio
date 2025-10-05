@@ -119,7 +119,7 @@ export const projectsData = {
       category: 'Applied AI, Cybersecurity, UI/UX Design, Product Design',
       technologies: ['React', 'Retrieval-Augmented Generation (RAG)', 'AI Code Analysis', 'Simulation Models', 'UI/UX Design'],
       image: `${import.meta.env.BASE_URL}images/projects/ai projects/ai-project1-preview.png`,
-      demoUrl: 'https://youtu.be/NHIeyXBeGKw',
+      demoUrl: 'https://pentelligentai.vercel.app/',
       githubUrl: null,
       featured: true,
       status: 'Concept / Prototype',
