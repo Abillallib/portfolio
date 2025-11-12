@@ -1,5 +1,40 @@
-import idbDashboardPreview from '../../IDB Latin America & Caribbean Socioeconomic Dashboard/IDB Latin America & Caribbean Socioeconomic Dashboard_page-0001.jpg';
-import idbPresentationPreview from '../../IDB Latin America & Caribbean Socioeconomic Analysis Presentation/IDB Latin America & Caribbean Socioeconomic Analysis Presentation_page-0001.jpg';
+import idbDashboardPage1 from '../../IDB Latin America & Caribbean Socioeconomic Dashboard/IDB Latin America & Caribbean Socioeconomic Dashboard_page-0001.jpg';
+import idbDashboardPage2 from '../../IDB Latin America & Caribbean Socioeconomic Dashboard/IDB Latin America & Caribbean Socioeconomic Dashboard_page-0002.jpg';
+import idbDashboardPage3 from '../../IDB Latin America & Caribbean Socioeconomic Dashboard/IDB Latin America & Caribbean Socioeconomic Dashboard_page-0003.jpg';
+import idbDashboardPage4 from '../../IDB Latin America & Caribbean Socioeconomic Dashboard/IDB Latin America & Caribbean Socioeconomic Dashboard_page-0004.jpg';
+import idbPresentationPage1 from '../../IDB Latin America & Caribbean Socioeconomic Analysis Presentation/IDB Latin America & Caribbean Socioeconomic Analysis Presentation_page-0001.jpg';
+import idbPresentationPage2 from '../../IDB Latin America & Caribbean Socioeconomic Analysis Presentation/IDB Latin America & Caribbean Socioeconomic Analysis Presentation_page-0002.jpg';
+import idbPresentationPage3 from '../../IDB Latin America & Caribbean Socioeconomic Analysis Presentation/IDB Latin America & Caribbean Socioeconomic Analysis Presentation_page-0003.jpg';
+import idbPresentationPage4 from '../../IDB Latin America & Caribbean Socioeconomic Analysis Presentation/IDB Latin America & Caribbean Socioeconomic Analysis Presentation_page-0004.jpg';
+import idbPresentationPage5 from '../../IDB Latin America & Caribbean Socioeconomic Analysis Presentation/IDB Latin America & Caribbean Socioeconomic Analysis Presentation_page-0005.jpg';
+import idbPresentationPage6 from '../../IDB Latin America & Caribbean Socioeconomic Analysis Presentation/IDB Latin America & Caribbean Socioeconomic Analysis Presentation_page-0006.jpg';
+
+const idbProjectGallery = [
+  idbDashboardPage1,
+  idbDashboardPage2,
+  idbDashboardPage3,
+  idbDashboardPage4,
+  idbPresentationPage1,
+  idbPresentationPage2,
+  idbPresentationPage3,
+  idbPresentationPage4,
+  idbPresentationPage5,
+  idbPresentationPage6
+].sort((a, b) => {
+  const extractSortableName = (src) => {
+    if (!src) return '';
+    const filename = src.split('/').pop() || '';
+    const cleanName = filename.replace(/-[a-zA-Z0-9_]+(?=\.[^.]+$)/, '');
+    return cleanName;
+  };
+
+  return extractSortableName(a).localeCompare(extractSortableName(b), undefined, {
+    numeric: true,
+    sensitivity: 'base'
+  });
+});
+
+const idbProjectPreviewImage = idbProjectGallery[0] || idbDashboardPage1;
 
 // Project data structure with dummy content
 export const projectsData = {
@@ -10,8 +45,8 @@ export const projectsData = {
       shortDescription: 'Interactive Power BI story revealing the socioeconomic shifts across Latin America and the Caribbean.',
       category: 'Business Intelligence, Data Storytelling, Data Visualization, Power BI',
       technologies: ['Power BI', 'Power Query', 'Excel', 'Canva'],
-      image: idbDashboardPreview,
-      gallery: [idbDashboardPreview, idbPresentationPreview],
+      image: idbProjectPreviewImage,
+      gallery: idbProjectGallery,
       demoUrl: null,
       githubUrl: null,
       featured: true,

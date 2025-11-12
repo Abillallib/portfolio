@@ -13,6 +13,7 @@ import {
   IconButton
 } from '@mui/material';
 import { ArrowBack, Launch, GitHub, TrendingUp, Category as CategoryIcon, Assessment } from '@mui/icons-material';
+import ProjectImageCarousel from '../ProjectImageCarousel/ProjectImageCarousel';
 
 const ProjectDetail = ({ project, onBack }) => {
   if (!project) return null;
@@ -146,43 +147,16 @@ const ProjectDetail = ({ project, onBack }) => {
           {/* Main Content */}
           <Grid item xs={12} md={8}>
             {/* Project Image */}
-            <Box sx={{ 
-              width: '100%',
-              position: 'relative',
-              borderRadius: 2,
-              overflow: 'hidden',
-              mb: 4,
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-              '&::before': {
-                content: '""',
-                display: 'block',
-                paddingBottom: '56.25%' /* 16:9 Aspect Ratio */
-              }
-            }}>
-              <Box
-                component="img"
-                src={project.image}
-                alt={project.title}
-                onContextMenu={(e) => e.preventDefault()}
-                onDragStart={(e) => e.preventDefault()}
-                sx={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  userSelect: 'none',
-                  WebkitUserSelect: 'none',
-                  MozUserSelect: 'none',
-                  msUserSelect: 'none',
-                  '&::selection': {
-                    background: 'transparent',
-                  },
-                }}
-              />
-            </Box>
+            <ProjectImageCarousel
+              images={project.gallery?.length ? project.gallery : [project.image]}
+              alt={project.title}
+              aspectRatio="16 / 9"
+              sx={{
+                width: '100%',
+                mb: 4,
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+              }}
+            />
 
             {/* Overview */}
             <Box sx={{ mb: 4 }}>

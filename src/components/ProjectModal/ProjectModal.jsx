@@ -12,6 +12,7 @@ import {
   Button
 } from '@mui/material';
 import { Close, Launch, GitHub, OpenInNew, Assessment } from '@mui/icons-material';
+import ProjectImageCarousel from '../ProjectImageCarousel/ProjectImageCarousel';
 
 const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
   if (!project) return null;
@@ -56,26 +57,19 @@ const ProjectModal = ({ project, open, onClose, onViewDetails }) => {
       </DialogTitle>
 
       <DialogContent sx={{ p: 3 }}>
-        <Box
-          component="img"
-          src={project.image}
+        <ProjectImageCarousel
+          images={project.gallery?.length ? project.gallery : [project.image]}
           alt={project.title}
-          onContextMenu={(e) => e.preventDefault()}
-          onDragStart={(e) => e.preventDefault()}
+          height={200}
           sx={{
-            width: '100%',
-            height: 200,
-            objectFit: 'cover',
             borderRadius: 1,
             mb: 3,
-            userSelect: 'none',
-            WebkitUserSelect: 'none',
-            MozUserSelect: 'none',
-            msUserSelect: 'none',
-            '&::selection': {
-              background: 'transparent',
-            },
+            boxShadow: '0 6px 24px rgba(0, 0, 0, 0.35)'
           }}
+          imageSx={{
+            objectFit: 'cover'
+          }}
+          showCounter={project.gallery?.length > 1}
         />
 
         <Typography 
