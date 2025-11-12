@@ -1,6 +1,33 @@
+import idbDashboardPreview from '../../IDB Latin America & Caribbean Socioeconomic Dashboard/IDB Latin America & Caribbean Socioeconomic Dashboard_page-0001.jpg';
+import idbPresentationPreview from '../../IDB Latin America & Caribbean Socioeconomic Analysis Presentation/IDB Latin America & Caribbean Socioeconomic Analysis Presentation_page-0001.jpg';
+
 // Project data structure with dummy content
 export const projectsData = {
   dataAnalysis: [
+    {
+      id: 'idb-lac-socioeconomic-analysis',
+      title: 'IDB LAC Socioeconomic Dashboard & Narrative',
+      shortDescription: 'Interactive Power BI story revealing the socioeconomic shifts across Latin America and the Caribbean.',
+      category: 'Business Intelligence, Data Storytelling, Data Visualization, Power BI',
+      technologies: ['Power BI', 'Power Query', 'Excel', 'Canva'],
+      image: idbDashboardPreview,
+      gallery: [idbDashboardPreview, idbPresentationPreview],
+      demoUrl: null,
+      githubUrl: null,
+      featured: true,
+      status: 'Completed',
+      metrics: {
+        'Countries Covered': '22',
+        'Years Analyzed': '30',
+        'Dashboard Pages': '4',
+        'Presentation Slides': '6'
+      },
+      fullDescription: 'Commissioned as part of an IDB assessment, this project pairs a multi-page Power BI dashboard with a six-slide executive presentation to evaluate 30 years of socioeconomic performance across Latin America and the Caribbean. The analysis unifies GDP, labor market, and education indicators into a cohesive storyline that highlights the structural factors influencing regional growth.',
+      challenges: 'Translating three decades of multi-indicator data into a focused narrative required balancing breadth with clarity while maintaining visual cohesion across interactive and static deliverables.',
+      solution: 'Developed an interactive Power BI dashboard with mobile-friendly filters for country, year, and indicator, then distilled the key findings into a concise presentation that guides stakeholders through the 2015 GDP decline and its labor and education drivers.',
+      results: 'Surfaced the 26.78% GDP per capita contraction in 2015, identified 13 countries driving the downturn, and articulated how gendered labor participation and literacy shifts limited the region’s rebound, culminating in targeted recommendations for IDB reviewers.',
+      keyTakeaways: 'Demonstrated the ability to merge analytical rigor with polished storytelling—using design systems aligned to IDB branding, interactive exploration, and actionable insights tailored for executive review.'
+    },
     {
       id: 'youtube-jamaica-analysis',
       title: 'YouTube Content Analysis: Jamaican Audience Insights',
