@@ -36,6 +36,15 @@ const ProjectImageCarousel = ({
     setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
 
+  const isVideo = (src) => {
+    if (!src) return false;
+    const videoExtensions = ['.mp4', '.webm', '.mov'];
+    return videoExtensions.some(ext => src.toLowerCase().endsWith(ext));
+  };
+
+  const currentSlide = slides[current];
+  const isCurrentVideo = isVideo(currentSlide);
+
   return (
     <Box
       sx={{
@@ -47,25 +56,48 @@ const ProjectImageCarousel = ({
         ...sx,
       }}
     >
-      <Box
-        component="img"
-        src={slides[current]}
-        alt={`${alt}${hasMultiple ? ` (slide ${current + 1} of ${slides.length})` : ''}`}
-        onContextMenu={(e) => e.preventDefault()}
-        onDragStart={(e) => e.preventDefault()}
-        sx={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-          transition: 'opacity 0.4s ease',
-          ...imageSx,
-        }}
-      />
+      {isCurrentVideo ? (
+        <Box
+          component="video"
+          src={currentSlide}
+          controls
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          sx={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            transition: 'opacity 0.4s ease',
+            backgroundColor: '#000',
+            ...imageSx,
+          }}
+        />
+      ) : (
+        <Box
+          component="img"
+          src={currentSlide}
+          alt={`${alt}${hasMultiple ? ` (slide ${current + 1} of ${slides.length})` : ''}`}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          sx={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            transition: 'opacity 0.4s ease',
+            ...imageSx,
+          }}
+        />
+      )}
 
       {hasMultiple && (
         <>

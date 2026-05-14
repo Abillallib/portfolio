@@ -261,6 +261,32 @@ export const projectsData = {
       solution: 'A four-step development process was followed:\n\n1. API Integration: Securely connected to the TogetherAI API to access a state-of-the-art text-to-image model.\n2. Backend Logic: The core functionality was written in Python, handling user text input, API requests, and processing the resulting image.\n3. Frontend & Deployment: Streamlit was used to rapidly develop and deploy an interactive and user-friendly web interface for the tool.\n4. Version Control: The entire codebase was managed on GitHub, enabling a clean deployment pipeline to the live web app.',
       results: 'The result is a fully deployed and functional web application that allows users to generate images from text prompts in real-time. This project was a foundational experience in the practical development lifecycle, solidifying an end-to-end, problem-solving mindset. The application serves as a successful proof-of-concept for how generative AI can be leveraged for rapid ideation and content creation.',
       keyTakeaways: 'This project was a deep dive into the practicalities of building and deploying a live AI service. It demonstrated the power of modern frameworks like Streamlit for rapid prototyping and the importance of understanding the complete development cycle, from managing API keys to launching a live URL.'
+    },
+    {
+      id: 'aja-website-revamp',
+      title: 'Atlanta Jamaica Association Website Revamp',
+      shortDescription: 'Modernized the Atlanta Jamaica Association website with a complete redesign focused on user experience and contemporary web standards.',
+      category: 'Web Development, UI/UX Design, Website Building',
+      technologies: ['Wix', 'Modern Web Design', 'Responsive Design', 'UI/UX'],
+      image: `${import.meta.env.BASE_URL}images/projects/ai projects/ai-project5-preview.png`,
+      gallery: [
+        `${import.meta.env.BASE_URL}images/projects/ai projects/ai-project5-preview.png`,
+        `${import.meta.env.BASE_URL}images/projects/ai projects/AJA Speed Up.mp4`
+      ],
+      demoUrl: null,
+      githubUrl: null,
+      featured: true,
+      status: 'Completed',
+      metrics: {
+        'Complete Redesign': '1',
+        'Modern UI/UX': '100%',
+        'Responsive Design': 'Yes'
+      },
+      fullDescription: 'The Atlanta Jamaica Association needed a modern web presence that reflected their vibrant community and mission. This project involved a complete website revamp, transforming their outdated site into a contemporary, user-friendly platform that better serves their members and showcases their cultural initiatives.',
+      challenges: 'The main challenge was to modernize the website while maintaining the organization\'s cultural identity and ensuring all existing content and functionality remained accessible. The previous site had outdated design patterns and poor mobile responsiveness.',
+      solution: 'A comprehensive redesign approach was implemented focusing on modern web standards, improved navigation, enhanced visual hierarchy, and full mobile responsiveness. The new design emphasizes the organization\'s cultural heritage while providing an intuitive user experience across all devices.',
+      results: 'The revamped website delivers a modern, professional online presence for the Atlanta Jamaica Association. The new design improves user engagement, makes information more accessible, and provides a platform that the organization can be proud to share with current and prospective members.',
+      keyTakeaways: 'This project demonstrated the importance of balancing modern design trends with cultural authenticity. It highlighted how thoughtful UI/UX design can transform an organization\'s digital presence and better serve their community\'s needs.'
     }
   ]
 };
